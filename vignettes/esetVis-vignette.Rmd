@@ -1,0 +1,710 @@
+---
+title: "Vignette of the esetVis package"
+author: "Laure Cougnaud"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_document:
+    css: custom.css
+    toc: true
+    toc_float:
+      collapsed: true
+    number_sections: true
+references:
+- id: spm
+  title: Spectral mapping, a technique for classifying biological activity profiles of chemical compounds
+  author:
+  - family: P.J.
+    given: Lewi
+  type: article-journal
+  volume: 26
+  page: 1295-1300
+  publisher: Arzneimittel Forschung (Drug Research)
+  issued:
+    year: 1976
+- id: tsne
+  title: Visualizing High-Dimensional Data Using t-SNE
+  author:
+  - family: van der Maaten
+    given: L.J.P.
+  type: article-journal
+  volume: 26
+  page: 2579-2605
+  publisher: Journal of Machine Learning Research
+  issued:
+    year: 2008
+- id: ldaFisher
+  title: The Use of Multiple Measurements in Taxonomic Problems
+  author:
+  - family: Fisher
+    given: R. A.
+  type: article-journal
+  volume: 7 (2)
+  page: 179-188
+  publisher: Annals of Eugenics
+  issued:
+    year: 1936
+vignette: >
+  %\VignetteIndexEntry{esetVis package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Introduction
+
+This document explains the functionalities available in the
+**esetVis** package.
+
+
+This package contains wrapper functions for three types of visualization:
+**spectral map**[@spm], **tsne**[@tsne] and **linear discriminant
+analysis**[@ldaFisher] for data contained in a _expressionSet
+Bioconductor_  (or an _SummarizedExperiment_) object. The visualizations are
+available in two types: **static**, via the
+[ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
+package or **interactive**, via the
+[ggvis](https://cran.r-project.org/web/packages/ggvis/index.html)
+or [rbokeh](https://cran.r-project.org/web/packages/rbokeh/index.html)
+packages.
+
+```{r options, echo = FALSE}
+	
+	library(knitr)
+	opts_chunk$set(echo = TRUE, results = 'asis', warning = FALSE, 
+		error = FALSE, message = FALSE, cache = FALSE,
+		fig.width = 8, fig.height = 7,
+		#out.width = '0.7\\textwidth', 
+		fig.align = 'center')#, out.height = 0.5\\textwidth', fig.path = 'graphs/') 
+	options(width = 170)#, stringsAsFactors = FALSE
+	options(warn = 1)#instead of warn = 0 by default -> to have place where warnings occur in the call to Sweave function
+	
+```
+
+```{r loadLibraries, results = 'hide', echo = FALSE}
+
+	library(esetVis)
+#	library(xtable)
+	library(pander)
+
+```
+
+# Example dataset
+
+## ExpressionSet object
+
+The _ALL_ dataset contains microarray results from 128 patients with
+acute lymphoblastic leukemia (ALL). The data is contained in a
+_Bioconductor_ `ExpressionSet` object.  Extra gene annotation is
+added to the object, via the annotation package `hgu95av2.db`.
+
+```{r ALL-loadAndFormatAllDataset}
+
+	library(ALL)
+	data(ALL)
+	
+	# to get gene annotation from probe IDs (from the paper HGU95aV2 gene chip was used)
+	library("hgu95av2.db")
+	library("AnnotationDbi")
+	probeIDs <- featureNames(ALL)
+	geneInfo <- AnnotationDbi::select(hgu95av2.db, probeIDs, 
+		c("ENTREZID", "SYMBOL", "GENENAME"), "PROBEID")
+	# 482 on the 12625 probe IDs don't have ENTREZ ID/SYMBOL/GENENAME
+
+	# remove genes with duplicated annotation: 1214
+	geneInfoWthtDuplicates <- geneInfo[!duplicated(geneInfo$PROBEID), ]
+
+	# remove genes without annotation: 482
+	genesWthtAnnotation <- rowSums(is.na(geneInfoWthtDuplicates)) > 0
+	geneInfoWthtDuplicatesAndWithAnnotation <- geneInfoWthtDuplicates[!genesWthtAnnotation, ]
+	
+	probeIDsWithAnnotation <- featureNames(ALL)[featureNames(ALL) %in% 
+		geneInfoWthtDuplicatesAndWithAnnotation$PROBEID]
+	ALL <- ALL[probeIDsWithAnnotation, ]
+	
+	fData <- geneInfoWthtDuplicatesAndWithAnnotation[
+		match(probeIDsWithAnnotation, geneInfoWthtDuplicatesAndWithAnnotation$PROBEID), ]
+	rownames(fData) <- probeIDsWithAnnotation
+	fData(ALL) <- fData
+
+	# grouping variable: B = B-cell, T = T-cell
+	groupingVariable <- pData(ALL)$BT
+	
+	# create custom palette
+	colorPalette <- c("dodgerblue", 
+		colorRampPalette(c("white","dodgerblue2", "darkblue"))(5)[-1], 
+		"red", colorRampPalette(c("white", "red3", "darkred"))(5)[-1])
+	color <- groupingVariable; levels(color) <- colorPalette
+	
+	# reformat type of the remission
+	remissionType <- ifelse(is.na(ALL$remission), "unknown", as.character(ALL$remission))
+	ALL$remissionType <- factor(remissionType,
+		levels = c("unknown", "CR", "REF"), 
+		labels = c("unknown", "achieved", "refractory"))
+
+```
+
+```{r ALL-loadAndFormatAllDataset-extraNotes, echo = FALSE}
+
+	fvarMetadata(ALL)$labelDescription <- paste(rownames(fvarMetadata(ALL)),
+		"obtained from the Bioconductor hgu95av2.db package")	
+
+```
+
+```{r rmAnnotObjectsFromMemory, echo = FALSE}
+
+	rm(list = c("fData", ls(pattern = "^(geneInfo|probeIDs)")));tmp <- gc(verbose = FALSE)
+	#for testing: sort(sapply(ls(), function(x) object.size(get(x))))
+
+```
+
+Following tables detail some sample and gene annotation contained in the _ALL_
+`ExpressionSet` used in the vignette.
+
+```{r ALL-someDataCharacteristics, echo = FALSE}
+
+	varLabelsUsed <- c("cod", "sex", "age", "BT", "remissionType")
+	pander(head(pData(ALL)[, varLabelsUsed]),
+		caption = "subset of the **phenoData** of the ALL dataset for the first genes")
+	
+	pander(head(fData(ALL)), 
+        caption = "**featureData** of the ALL dataset for the first genes")
+
+```
+
+## SummarizedExperiment object
+
+The functions of the package also supports object
+of class:
+[`SummarizedExperiment`](http://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html).
+Note: In this case, the functions `fData`, `pData`, `exprs` should be replaced
+by their corresponding functions `rowData`, `colData` and `assay`.
+
+# Spectral map: `esetSpectralMap`
+
+## Simple spectral map
+
+The function `esetSpectralMap` creates a **spectral
+map**[@spm] for the dataset. Some default parameters are set, e.g.
+to print the top 10 samples and top 10 genes, to display the first two
+dimensions of the analysis...
+
+The resulting biplot contains two components:
+
+* in the background, a cloud of the genes coordinates (plotted with the
+  [hexbin](https://cran.r-project.org/web/packages/hexbin/index.html) package)
+* in the foreground, each sample of the data is represented as a single
+  point/symbol
+
+Here is an example for the _ALL_ dataset, with the default parameters.
+
+```{r ALL-esetSimple}
+
+	print(esetSpectralMap(eset = ALL))
+
+```
+
+## Additional sample information
+
+Several annotation variables are available in the `eSet`.
+
+### General
+
+Four different aesthetics `[aes]` can be used to display these variables:
+
+* **color**, with the tag `color`
+* **transparency**, with the tag `alpha`
+* **size**, with the tag `size`
+* **shape**, with the tag `shape`
+
+For each of this aesthetic `[aes]`, several parameters are available:
+
+* `[aes]Var`: name of the column of the `phenoData` of the
+  `eSet` used for the aesthetic, i.e. `colorVar`
+* `[aes]`: palette/specified shape/size used for the aesthetic, i.e.
+  `color`
+
+### Custom size and transparency
+
+Custom size and the transparency (variables `sizeVar` and `alphaVar`) can be
+specified:
+
+* if the size/transparency is a numerical
+variable (numeric or integer), the range of the size/transparency can be
+specified respectively with the arguments `sizeRange` and
+`alphaRange`
+* in the other cases (factor or character), custom
+size/transparency can be specified directly respectively via the `size`
+and `alpha`   arguments
+
+In the example, the type and stage of the disease (variable
+_BT_) is used for coloring, the remission type for the transparency, the
+_sex_ for the shape and the _age_ for the size of the points. A custom color
+palette is specified via the `color` argument.
+
+```{r ALL-esetSampleAnnotation1}
+
+	print(esetSpectralMap(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Sample annotation (1)",
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex", 
+		sizeVar = "age", sizeRange = c(0.1, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamples = 0, topGenes = 0, cloudGenes = FALSE))
+
+```
+
+Just for the demonstration, another visualization of the same dataset,
+using this time a continuous variable: _age_ for coloring and transparency, a
+factor for the size and _BT_ for the shape.
+
+```{r ALL-esetSampleAnnotation2}
+
+	print(esetSpectralMap(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Sample annotation (2)",
+		colorVar = "age",
+		shapeVar = "BT", shape = 15+1:nlevels(ALL$BT),
+		sizeVar = "remissionType", size = c(2, 4, 6),
+		alphaVar = "age", alphaRange = c(0.2, 0.8),
+		topSamples = 0, topGenes = 0, cloudGenes = TRUE))
+
+```
+
+## Custom gene representation
+
+Several parameters related to the gene visualization are available:
+
+* gene subset: only a subset of the genes (at least two) can be displayed, via
+  the argument `psids`
+* gene cloud:
+  + inclusion/removal of the gene cloud via `cloudGenes`
+  + number of bins specification via `cloudGenesNBins`
+  + cloud color via `cloudGenesColor`
+  + legend:
+    - inclusion/removal of the gene legend via `cloudGenesIncludeLegend`
+    - title legend specified via `cloudGenesTitleLegend`
+    
+The spectral map is done only on the subset of the genes, with the number of
+bins, color, and legend title modified.
+    
+```{r ALL-customGeneRepresentation}
+
+	print(esetSpectralMap(eset = ALL,
+		psids = 1:1000,
+		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Custom cloud genes",
+		topSamples = 0, topGenes = 0, 
+		cloudGenes = TRUE, cloudGenesColor = "red", cloudGenesNBins = 50,
+		cloudGenesIncludeLegend = TRUE, cloudGenesTitleLegend = "number of features"))
+
+```
+
+## Label outlying elements
+
+###  Parameters
+
+Three different kind of elements can be labelled in the
+plot: **genes, samples and gene sets**.
+
+For each `[element]`, several parameters are available:
+
+* `top[Elements]`: number of elements to label
+* `top[Elements]Var` (not available for gene sets): column of the
+corresponding element in the `eSet` used for labelling, in
+`phenoData` for sample and `featureData` for gene. If not
+specified, the feature/sample names of the `eSet` are used
+* `top[Elements]Just`: label justification
+* `top[Elements]Cex`: label size
+* `top[Elements]Color`: label color
+
+### Method to select top elements
+
+The **distance (sum of squared coordinates) of the gene/sample/gene set to the
+origin of the plot** is used to rank the elements, and to extract the top
+'outlying' ones.
+
+### Package used for static plot
+
+By default (and if installed), the package
+[ggrepel](https://cran.r-project.org/web/packages/ggrepel/index.htm)
+is used for text labelling (as in this vignette), to avoid overlapping labels.
+The text labels can also be displayed with the
+[ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
+by setting the parameter `packageTextLabel` to `ggplot2` (default
+`ggrepel`).
+
+### Example
+
+In the example, the top genes are labelled with gene symbols (_SYMBOL_
+column of the phenoData of the eSet), and the top samples with patient
+identifiers (_cod_ column of the phenoData of the eSet).
+
+```{r ALL-genesSamplesAnnotation}
+
+	print(esetSpectralMap(eset = ALL, 
+		title = paste("Acute lymphoblastic leukemia dataset \n",
+			"Spectral map \n Label outlying samples and genes"),
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topGenes = 10, topGenesVar = "SYMBOL",
+		topGenesCex = 2, topGenesColor = "darkgrey",
+		topSamples = 15, topSamplesVar = "cod", topSamplesColor = "chocolate4",
+		topSamplesCex = 3
+	))
+
+```
+
+## Gene sets annotation
+
+Genes can be grouped into biologically meaningful gene sets, which can be
+labelled in the biplot.
+
+Compared to previous section, two additional parameters are
+available: 
+
+* `geneSets` (**required**): list of
+gene sets. Each element in the list should contain genes identifiers, and the
+  list should be named
+* `geneSetsVar`: column of the featureData of the eSet used to map the gene
+  identifiers contained in the `geneSets` object
+* `geneSetsMaxNChar`: number of characters used in gene sets labels
+
+The `geneSets` can be created with the `getGeneSetsForPlot`
+function (wrapper around the `getGeneSets` function of the
+[MLP](https://www.bioconductor.org/packages/release/bioc/html/MLP.html)
+package), which can extract gene sets available in the Gene Ontology (Biological
+Process, Molecular Function and Cellular Component) and KEGG databases. Custom
+gene set lists can also be provided.
+
+In the following example, only the pathways from the _GOBP_ database are
+used.
+
+```{r ALL-extractGeneSets}
+
+	geneSets <- getGeneSetsForPlot(
+		entrezIdentifiers = fData(ALL)$ENTREZID, 
+		species = "Human", 
+		geneSetSource = 'GOBP',
+		useDescription = TRUE)
+
+```
+
+Then this list of gene sets is provided to the `esetSpectralMap`
+function.
+
+```{r ALL-geneSetAnnotation}
+
+	print(esetSpectralMap(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Gene set annotation",
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topGenes = 0,
+		topGeneSets = 4, geneSets = geneSets, geneSetsVar = "ENTREZID", geneSetsMaxNChar = 30,
+		topGeneSetsCex = 2, topGeneSetsColor = "purple"))
+
+```
+
+Note: because of the inherent hierarchical structure of the Gene Ontology
+database, sets of genes can be very similar, which can result in close (even
+overlapping) labels in the visualization.
+
+```{r rmGeneSetsFromMemory, echo = FALSE}
+
+	rm(geneSets);tmp <- gc(verbose = FALSE)
+
+```
+
+## Dimensions of the biplot
+
+In all previous plots, only the first dimensions of the principal component
+analysis were visualized, this can be specified via the `dim` parameter.
+The third and fourth dimensions are visualized in the next Figure. This
+parameter is only available for the spectral map visualization.
+
+```{r ALL-dimensionsBiPlot}
+
+	print(esetSpectralMap(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Dimensions of the PCA",
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(0.5, 4),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		dim = c(3, 4)))
+
+```
+
+## Implementation
+
+The function uses the `mpm` and `plot.mpm` function from the
+`mpm` package. Some default parameters are set for these two functions,
+they can be changed via the `mpm.args` and `plot.mpm.args`
+arguments. For further details, refer to the documentation of these two
+functions.
+
+Note: One important argument is `logtrans` in `mpm`
+function, which indicates if the **data should be first log-transformed**
+before the computation. It is set by default to FALSE, **assuming that the
+data are already in the log scale** (it is the case for the _ALL_
+dataset).
+
+## Interactive spectral map
+
+All plots available in the `esetVis` package can be **static or
+interactive**.
+
+The argument `typePlot` can be set respectively to
+`static` (by default), in this case `ggplot2` is used, or
+`interactive`, in this case either the `ggvis` or
+`rbokeh` package is used.
+
+Two functionalities of the interactive plot can be of
+interest for such high-dimensional data:
+
+* **hoover** to check sample annotation.
+  By default, only the sample variables used for the aesthetics are displayed
+  when hoovering on a specific sample dot. Additional sample variables
+  (contained in `phenoData`) displayed in the hoover can be specified via the
+  `interactiveTooltipExtraVars` parameter.
+* **zoom** to focus on specific sample in high-dimensional
+  dataset
+  
+
+The same spectral map than in previous section is used, this time in an
+interactive plot.
+
+
+```{r ALL-interactivePlot}
+
+	# wrapper for rbokeh/ggvis example
+	esetSPMInteractive <- function(...)
+		esetSpectralMap(eset = ALL, 
+			title = paste("Acute lymphoblastic leukemia dataset - spectral map"),
+			colorVar = "BT", color = colorPalette,
+			shapeVar = "sex",
+			alphaVar = "remissionType",
+			typePlot = "interactive", ...
+	)
+
+```
+
+### rbokeh
+
+<!-- out.width = "600px", out.height = "800px" -->
+```{r ALL-interactivePlot-rbokeh, cache = FALSE}
+		
+	esetSPMInteractive(
+		packageInteractivity = "rbokeh",
+		figInteractiveSize = c(700, 600),
+		size = 6,
+		# use all phenoData variables for hoover
+		interactiveTooltipExtraVars = varLabels(ALL))
+	
+```
+
+### ggvis
+
+Note: as `ggvis` plot requires to have a R session running, only a static
+version of the plot is included.
+
+```{r ALL-interactivePlot-ggvis, cache = FALSE}
+		
+	# embed a static version of the plot
+	library(ggvis)
+	knit_print.ggvis(
+		esetSPMInteractive(
+			packageInteractivity = "ggvis",
+			sizeVar = "age", sizeRange = c(2, 6),
+			figInteractiveSize = c(700, 600)
+		)
+	)
+
+```
+
+<!-- Figure #spectralMapGgvis shows a static view of the obtained plot in ggvis. -->
+<!-- ![spectralMapGgvis](spectralMap-ggvis.svg "Screenshot of a spectral map example with ggvis") -->
+
+# Tsne: `esetTsne`
+
+## General
+
+Another unsupervised visualization is available in the package:
+**t-Distributed Stochastic Neighbor Embedding** (_tsne_). The
+function `esetTnse` uses the `Rtsne` function of the same
+package.
+
+Most of the previous parameters discussed for the spectral map are
+available for this visualization, at the exception of:
+
+* parameter linked to gene annotation/labelling. The gene annotation is  not
+  (yet) mapped to the sample coordinated obtained as output from the
+  `Rtsne` function
+* parameter specific to the spectral map, i.e. `dim`
+
+Arguments to the `Rtsne` function can be specified via the
+`Rtsne.args` argument.
+
+Here is an example of tsne, for the same dataset and same annotation/labelling.
+
+<!-- takes 8s  -->
+```{r ALL-tsne}
+
+	print(esetTsne(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Tsne",
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamplesVar = "cod"
+	))
+
+```
+
+## Additional pre-processing step
+
+The tsne can be quite time-consuming, especially for big data. As the
+`Rtsne` function used in the background can also uses an object of class
+`dist`, the data can be pre-transformed before running the `tsne`
+analysis. The argument `fctTransformDataForInputTsne` enables to specify
+a custom function to pre-transform the data.
+
+```{r ALL-tsne-preProcessing}
+
+	print(esetTsne(eset = ALL, 
+		title = "Acute lymphoblastic leukemia dataset \n Tsne",
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamplesVar = "cod",
+		fctTransformDataForInputTsne = 
+			function(mat)	as.dist((1 - cor(mat))/2)
+	))
+
+```
+
+# Linear discriminant analysis: `esetLda`
+
+Another visualization, this time semi-supervised (as a variable is used for the
+computation), is included: **Linear Discriminant Analysis**. This uses the
+`lda` function from the `MASS` package.
+
+This function maximizes the variance between levels of a factor, here describing
+some sample annotation, specified via the `ldaVar` argument.
+
+As this analysis can be quite time consuming,
+for the demonstration, the analysis is run only a random feature subset
+of the data. 
+
+## All samples
+
+The `returnAnalysis` parameter can be used, to extract the
+analysis which will be used as input for the `esetPlotWrapper` function,
+used in the background. It is available also for the `esetSpectralMap`
+and `esetTnse` functions.
+
+```{r ALL-Lda, fig.keep = 'first'}
+
+	# extract random features, because analysis is quite time consuming
+	retainedFeatures <- sample(featureNames(ALL), size = floor(nrow(ALL)/5))
+	
+	# run the analysis
+	outputEsetLda <- esetLda(eset = ALL[retainedFeatures, ], ldaVar = "BT",
+		title = paste("Acute lymphoblastic leukemia dataset \n",
+			"Linear discriminant analysis on BT variable \n",
+			"(Subset of the feature data)"),
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamplesVar = "cod", topGenesVar = "SYMBOL",
+		returnAnalysis = TRUE
+	)
+
+	# extract and print the ggplot object
+	print(outputEsetLda$plot)
+```
+
+The top elements (here genes and samples) labelled in the plot can be accessed
+via the `topElements` slot of the object. These are labelled with the
+identifiers used in the plot and named with sample/gene identifiers of the
+`eset`.
+
+```{r ALL-Lda-topElements}	
+
+	# extract top elements labelled in the plot
+	pander(t(data.frame(topGenes = outputEsetLda$topElements[["topGenes"]])))
+	pander(t(data.frame(topSamples = outputEsetLda$topElements[["topSamples"]])))
+
+```
+
+When `returnAnalysis` is set to TRUE, the output of the function can be
+used as input to the `esetPlotWrapper` function, and extra parameters can
+then be modified.
+
+Here the variable used for the shape of the points for the samples is changed to
+type of remission (_remissionType_ column).
+
+```{r ALL-Lda-changeSomeParameters}
+
+	# to change some plot parameters
+	esetPlotWrapper(
+		dataPlotSamples = outputEsetLda$analysis$dataPlotSamples,
+		dataPlotGenes = outputEsetLda$analysis$dataPlotGenes,
+		esetUsed = outputEsetLda$analysis$esetUsed,
+		title = paste("Acute lymphoblastic leukemia dataset \n",
+			"Linear discriminant analysis on BT variable (2) \n",
+			"(Subset of the feature data)"),
+		colorVar = "BT", color = colorPalette,
+		shapeVar = "remissionType", 
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamplesVar = "cod", topGenesVar = "SYMBOL"
+	)
+
+```
+
+```{r rmOutputEsetLdaFromMemory, echo = FALSE}
+
+	rm(outputEsetLda);tmp <- gc(verbose = FALSE)
+
+```
+
+## Data sample subset
+
+From the previous visualization (obtained on a subset of the genes), the biggest
+difference between all levels of the type/stage of the disease seems to reside
+between all B-cells (tagged _B_) and T-cells (tagged _T_). It might be
+interesting to focus on a subset of the data, e.g. only one cell type.
+
+```{r ALL-Lda-BcellOnly}
+
+	# keep only 'B-cell' samples
+	ALLBCell <- ALL[, grep("^B", ALL$BT)]
+	ALLBCell$BT <- factor(ALLBCell$BT)
+	colorPaletteBCell <- colorPalette[1:nlevels(ALLBCell$BT )]
+	
+	print(esetLda(eset = ALLBCell[retainedFeatures, ], ldaVar = "BT",
+		title = paste("Acute lymphoblastic leukemia dataset \n",
+			"Linear discriminant analysis on BT variable \n B-cell only",
+			"(Subset of the feature data)"
+		),
+		colorVar = "BT", color = colorPaletteBCell,
+		shapeVar = "sex",
+		sizeVar = "age", sizeRange = c(2, 6),
+		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
+		topSamplesVar = "cod", topGenesVar = "SYMBOL",
+	))
+
+```
+
+```{r rmALLBCellFromMemory, echo = FALSE}
+
+	rm(ALLBCell);tmp <- gc(verbose = FALSE)
+
+```
+The subcell type which seems to differ the most within all B-cell type is
+the
+first one: _B1_ (most of these samples at the right side of the plot).
+
+# References

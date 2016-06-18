@@ -1,0 +1,8 @@
+0.99.3
+	o support object of class 'SummarizedExperiment'
+0.99.2
+	o increase version number after subscribed to bioc-devel list
+0.99.1
+	o add extra imports (packages base R) + vignette with clean = FALSE
+0.99.0
+	o first version of the package submitted to Bioconductor

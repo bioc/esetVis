@@ -1,0 +1,22 @@
+Package: esetVis
+Type: Package
+Title: Visualizations of expressionSet Bioconductor object
+Version: 0.99.4
+Date: 2016-06-08
+Author: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
+Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
+Description: Utility functions for visualization of expressionSet (or
+        SummarizedExperiment) Bioconductor object, including spectral
+        map, tsne and linear discriminant analysis. Static plot via the
+        ggplot2 package or interactive via the ggvis or rbokeh packages
+        are available.
+Imports: mpm, hexbin, Rtsne, MLP, grid, Biobase, MASS, stats, utils,
+        grDevices
+Suggests: ggplot2, ggvis, rbokeh, ggrepel, knitr, rmarkdown, ALL,
+        hgu95av2.db, AnnotationDbi, pander, SummarizedExperiment
+biocViews: Visualization, DataRepresentation, DimensionReduction,
+        PrincipalComponent, Pathways
+VignetteBuilder: knitr
+License: GPL-3
+RoxygenNote: 5.0.1
+NeedsCompilation: no
