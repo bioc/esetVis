@@ -41,7 +41,7 @@
 #' @param packageTextLabel package used to label the outlying genes/samples/gene sets,
 #' either \code{ggrepel} (by default, only used if package \code{ggrepel} is available),
 #' or \code{ggplot2}
-#' @param topGenes numeric indicating which percentile (if <=1) or number (if >1) of genes
+#' @param topGenes numeric indicating which percentile (if <1) or number (if >=1) of genes
 #' most distant to the origin of the plot to annotate, by default: 10 genes are selected
 #' If no genes should be annotated, set this parameter to 0
 #' Currently only available for static plot.
@@ -51,7 +51,7 @@
 #' @param topGenesJust text justification for the genes (used when \code{topGenes} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
 #' by default: c(0.5, 0.5) so centered
 #' @param topGenesColor text color for the genes (used when \code{topGenes} > 0), black by default
-#' @param topSamples numeric indicating which percentile (if <=1) or number (if >1) of samples
+#' @param topSamples numeric indicating which percentile (if <1) or number (if >=1) of samples
 #' most distant to the origin of the plot to annotate, by default: 10 samples are selected
 #' If no samples should be annotated, set this parameter to 0.
 #' Currently available for static plot.

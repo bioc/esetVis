@@ -81,8 +81,8 @@ plotTopElements <- function(top,
 		distToOrigin <- sqrt(rowSums(coor ^ 2))
 		idxElementsSorted <- order(distToOrigin, decreasing = TRUE)
 		
-		#if top less than (or equal) 1, percentage, otherwise absolute number
-		idxTop <- 1:(if(top <= 1)	(top * nElements)	else	min(top, nElements))
+		#if top less than 1, percentage, otherwise absolute number
+		idxTop <- 1:(if(top < 1)	(top * nElements)	else	min(top, nElements))
 		idxElementsKept <- idxElementsSorted[idxTop]
 		coorElementsKept <- coor[idxElementsKept, ]
 	
