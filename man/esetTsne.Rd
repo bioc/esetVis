@@ -76,7 +76,7 @@ This should be a function which takes a matrix as input and return a matrix, e.g
 either \code{ggrepel} (by default, only used if package \code{ggrepel} is available),
 or \code{ggplot2}}
 
-\item{topSamples}{numeric indicating which percentile (if <=1) or number (if >1) of samples
+\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) of samples
 most distant to the origin of the plot to annotate, by default: 10 samples are selected
 If no samples should be annotated, set this parameter to 0.
 Currently available for static plot.}

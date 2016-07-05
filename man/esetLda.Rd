@@ -87,7 +87,7 @@ include the legend for the cloud of genes (in the top position if multiple legen
 \item{cloudGenesTitleLegend}{string with title for the legend for the cloud of genes
 'nGenes' by default}
 
-\item{topGenes}{numeric indicating which percentile (if <=1) or number (if >1) of genes
+\item{topGenes}{numeric indicating which percentile (if <1) or number (if >=1) of genes
 most distant to the origin of the plot to annotate, by default: 10 genes are selected
 If no genes should be annotated, set this parameter to 0
 Currently only available for static plot.}
@@ -102,7 +102,7 @@ by default: c(0.5, 0.5) so centered}
 
 \item{topGenesColor}{text color for the genes (used when \code{topGenes} > 0), black by default}
 
-\item{topSamples}{numeric indicating which percentile (if <=1) or number (if >1) of samples
+\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) of samples
 most distant to the origin of the plot to annotate, by default: 10 samples are selected
 If no samples should be annotated, set this parameter to 0.
 Currently available for static plot.}

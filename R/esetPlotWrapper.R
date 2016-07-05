@@ -300,11 +300,16 @@ esetPlotWrapper <- function(
 			}
 			
 			## sample plot
+			
+			# fix for ggplot when variable names contained space
+			formatVariableSpace <- function(var)
+				if(grepl(" ", var))	paste0("`", var, "`")	else var
+			
 			aesArgSamplePlot <- c(list(x = 'X', y = 'Y'),
-				if(!is.null(colorVar))	list(color = colorVar),
-				if(!is.null(shapeVar))	list(shape = shapeVar),
-				if(!is.null(sizeVar))	list(size = sizeVar),
-				if(!is.null(alphaVar))	list(alpha = alphaVar)
+				if(!is.null(colorVar))	list(color = formatVariableSpace(colorVar)),
+				if(!is.null(shapeVar))	list(shape = formatVariableSpace(shapeVar)),
+				if(!is.null(sizeVar))	list(size = formatVariableSpace(sizeVar)),
+				if(!is.null(alphaVar))	list(alpha = formatVariableSpace(alphaVar))
 			)
 						
 			geomPointArgs <- c(

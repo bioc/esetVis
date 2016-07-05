@@ -1,3 +1,5 @@
+0.99.8
+	o fix issue for ggplot2 plot when variable names contain space
 0.99.7
 	o fix issue: no annotated samples/genes and returnAnalysis set to TRUE
 0.99.6
