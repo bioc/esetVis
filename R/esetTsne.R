@@ -137,17 +137,17 @@ esetTsne <- function(eset,
 		returnTopElements = returnAnalysis,
 		packageInteractivity = packageInteractivity,
 		packageTextLabel = packageTextLabel)
-
-	someTopElementsReturned <- any(!class(plot) == "ggplot")
 	
 	res <- if(!returnAnalysis)	plot else
 		c(
-			list(analysis = list(
-				dataPlotSamples = dataPlotSamples,
-				esetUsed = esetUsed
-			)),
-			if(someTopElementsReturned)	list(topElements = plot$topElements)	else NULL,
-			list(plot = plot$plot)
+			list(
+				analysis = list(
+					dataPlotSamples = dataPlotSamples,
+					esetUsed = esetUsed
+				)
+			),
+			if(!is.null(plot$topElements))	list(topElements = plot$topElements),
+			list(plot = if(inherits(plot, "ggplot"))	plot	else	plot$plot)
 		)
 
 	return(res)

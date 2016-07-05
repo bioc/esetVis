@@ -1,3 +1,7 @@
+0.99.7
+	o fix issue: no annotated samples/genes and returnAnalysis set to TRUE
+0.99.6
+	o fix issue when returnAnalysis and no top elements
 0.99.5
 	o annotated one gene/sample when topGenes/topSamples is set to 1
 0.99.4
