@@ -14,17 +14,17 @@
 #' @seealso the function used internally: \code{\link[MASS]{lda}}
 #' @return if \code{returnAnalysis} is TRUE, return a list:
 #' \itemize{
-#'  \item{analysis: }{output of the spectral map analysis, can be given as input to the \code{\link{esetPlotWrapper}} function}
+#'  \item{analysis: }{output of the spectral map analysis, whose parameters
+#' can be given as input to the \code{\link{esetPlotWrapper}} function}
 #'    \itemize{
 #' 		\item{dataPlotSamples: }{coordinates of the samples}
 #' 		\item{dataPlotGenes: }{coordinates of the genes}
 #' 		\item{esetUsed: }{expressionSet used in the plot}
-#'      \item{axisLabels: }{axes labels indicating percentage of variance explained by the selected axes}
 #' 	  }
 #'   \item{topElements: }{list with top outlying elements if any, possibly genes, samples and gene sets}
 #'   \item{plot: }{the plot output}
 #' }
-#' otherwise return only the plot
+#' otherwise return only the plot	
 #' @examples
 #' # load data
 #' library(ALL)

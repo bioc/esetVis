@@ -1,6 +1,6 @@
 #' @title plot a t-SNE of an \linkS4class{eSet} object
 #' @description \code{esetTsne} reduces the dimension of the data contained in the \linkS4class{eSet} via t-Distributed Stochastic Neighbor Embedding
-#'  with the \code{Rtsne} function and plot the subsequent biplot, possibly with sample annotation contained in the eSet.
+#'  with the \code{\link[RTnse]{RTnse}} function and plot the subsequent biplot, possibly with sample annotation contained in the eSet.
 #' @param eset expressionSet (or SummarizedExperiment) object with data
 #' @param psids featureNames of genes to include in the plot, all by default
 #' @param trace logical, if TRUE (by default), print some messages during tsne is running
@@ -8,7 +8,7 @@
 #' perplexite parameter = optimal number of neighbours, 
 #' theta = speed/accuracy trade-off (increase for less accuracy), set to 0.0 for exact TSNE
 #' @param fctTransformDataForInputTsne function which transform the data in the eSet object before
-#' calling the \code{RTnse} function. 
+#' calling the \code{\link[RTnse]{RTnse}} function. 
 #' This should be a function which takes a matrix as input and return a matrix, e.g. the dist function.
 #' @param returnAnalysis logical, if TRUE (FALSE by default), return also the output of the analysis,
 #' and the outlying samples in the topElements element if any, otherwise only the plot object
@@ -20,11 +20,11 @@
 #'  for further explanations about this technique.
 #' @return if \code{returnAnalysis} is TRUE, return a list:
 #' \itemize{
-#'  \item{analysis: }{output of the spectral map analysis, can be given as input to the \code{esetPlotWrapper} function}
+#'  \item{analysis: }{output of the spectral map analysis, whose elements can be given
+#'  to the \code{\link{esetPlotWrapper}} function}
 #'    \itemize{
 #' 		\item{dataPlotSamples: }{coordinates of the samples}
 #' 		\item{esetUsed: }{expressionSet used in the plot}
-#'      \item{axisLabels: }{axes labels indicating percentage of variance explained by the selected axes}
 #' 	  }
 #'   \item{topElements: }{list with top outlying elements if any, possibly genes, samples and gene sets}
 #'   \item{plot: }{the plot output}

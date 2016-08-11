@@ -35,40 +35,57 @@ esetSpectralMap(eset, psids = 1:nrow(eset), dim = c(1, 2),
 
 \item{dim}{dimensions of the analysis to represent, first two dimensions by default}
 
-\item{colorVar}{name of variable (in varLabels of the \code{eset}) used for coloring, NULL by default}
+\item{colorVar}{name of variable (in varLabels of the \code{eset}) used 
+for coloring, NULL by default}
 
-\item{color}{specified color(s) for the points, replicated if needed, used only if \code{colorVar} is NULL, a factor or character
-by default: 'black' if \code{colorVar} is not specified and default \code{ggplot} palette otherwise}
+\item{color}{specified color(s) for the points, replicated if needed, 
+used only if \code{colorVar} is NULL, a factor or character
+by default: 'black' if \code{colorVar} is not specified and default 
+\code{ggplot} palette otherwise}
 
-\item{shapeVar}{name of variable (in varLabels of the \code{eset}) used for the shape, NULL by default}
+\item{shapeVar}{name of variable (in varLabels of the \code{eset}) 
+used for the shape, NULL by default}
 
-\item{shape}{specified shape(s) (pch) for the points, replicated if needed, used only if \code{shapeVar} is NULL, a factor or character
-by default: '15' (filled square) if \code{shapeVar} is not specified and default \code{ggplot} shape(s) otherwise}
+\item{shape}{specified shape(s) (pch) for the points, replicated if 
+needed, used only if \code{shapeVar} is NULL, a factor or character
+by default: '15' (filled square) if \code{shapeVar} is not specified 
+and default \code{ggplot} shape(s) otherwise}
 
-\item{sizeVar}{name of variable (in varLabels of the \code{eset}) used for the size, NULL by default}
+\item{sizeVar}{name of variable (in varLabels of the \code{eset}) 
+used for the size, NULL by default}
 
-\item{size}{specified size(s) (cex) for the points, replicated if needed, used only if \code{sizeVar} is NULL, a factor or character
-by default: '2.5' if \code{sizeVar} is not specified and default \code{ggplot} size(s) otherwise}
+\item{size}{specified size(s) (cex) for the points, replicated if 
+needed, used only if \code{sizeVar} is NULL, a factor or character
+by default: '2.5' if \code{sizeVar} is not specified and default 
+\code{ggplot} size(s) otherwise}
 
-\item{sizeRange}{size (cex) range used in the plot, possible only if the \code{sizeVar} is 'numeric' or 'integer'}
+\item{sizeRange}{size (cex) range used in the plot, possible only 
+if the \code{sizeVar} is 'numeric' or 'integer'}
 
-\item{alphaVar}{name of variable (in varLabels of the \code{eset}) used for the transparency, NULL by default.
+\item{alphaVar}{name of variable (in varLabels of the \code{eset}) 
+used for the transparency, NULL by default.
 This parameter is currently only available for static plot.}
 
-\item{alpha}{specified transparency(s) for the points, replicated if needed, used only if \code{shapeVar} is NULL, a factor or character
-by default: '1' if \code{alphaVar} is not specified and default \code{ggplot} alpha otherwise
+\item{alpha}{specified transparency(s) for the points, replicated if 
+needed, used only if \code{shapeVar} is NULL, a factor or character
+by default: '1' if \code{alphaVar} is not specified and default 
+\code{ggplot} alpha otherwise
 This parameter is currently only available for static plot.}
 
-\item{alphaRange}{transparency (alpha) range used in the plot, possible only if the \code{alphaVar} is 'numeric' or 'integer'
+\item{alphaRange}{transparency (alpha) range used in the plot, 
+possible only if the \code{alphaVar} is 'numeric' or 'integer'
 This parameter is currently only available for static plot.}
 
 \item{title}{plot title, '' by default}
 
-\item{mpm.args}{arguments for the mpm function, by default:
-closure = 'none', center = 'double', normal = 'global', 'row.weight' = 'mean',
-col.weight = 'constant', logtrans = FALSE (assume that data are already in a log scale)}
+\item{mpm.args}{list with input parameters for the \code{\link[mpm]{mpm}} function.
+The default value is:
+\code{list(closure = 'none', center = 'double', normal = 'global', 'row.weight' = 'mean',
+col.weight = 'constant', logtrans = FALSE)}.
+This assumes that the data are already in a log scale.}
 
-\item{plot.mpm.args}{arguments for the plot.mpm function}
+\item{plot.mpm.args}{list with input parameters for the \code{\link[mpm]{plot.mpm}} function.
+The default value is: list(scale = "uvc").}
 
 \item{symmetryAxes}{set symmetry for axes, either:
 \itemize{
@@ -81,9 +98,11 @@ col.weight = 'constant', logtrans = FALSE (assume that data are already in a log
 either \code{ggrepel} (by default, only used if package \code{ggrepel} is available),
 or \code{ggplot2}}
 
-\item{cloudGenes}{logical, if TRUE (by default), include the cloud of genes in the spectral map}
+\item{cloudGenes}{logical, if TRUE (by default), include the 
+cloud of genes in the spectral map}
 
-\item{cloudGenesColor}{if \code{cloudGenes} is TRUE, color for the cloud of genes, black by default}
+\item{cloudGenesColor}{if \code{cloudGenes} is TRUE, 
+color for the cloud of genes, black by default}
 
 \item{cloudGenesNBins}{number of bins to used for the clouds of genes,
 by default the square root of the number of genes}
@@ -104,37 +123,51 @@ Currently only available for static plot.}
 \item{topGenesVar}{variable of the featureData used to label the genes, 
 by default: NULL, the featureNames are used for labelling (used when \code{topGenes} > 0)}
 
-\item{topGenesJust}{text justification for the genes (used when \code{topGenes} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
+\item{topGenesJust}{text justification for the genes 
+(used when \code{topGenes} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
 by default: c(0.5, 0.5) so centered}
 
-\item{topGenesColor}{text color for the genes (used when \code{topGenes} > 0), black by default}
+\item{topGenesColor}{text color for the genes 
+(used when \code{topGenes} > 0), black by default}
 
-\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) of samples
-most distant to the origin of the plot to annotate, by default: 10 samples are selected
+\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) 
+of samples most distant to the origin of the plot to annotate, 
+by default: 10 samples are selected
 If no samples should be annotated, set this parameter to 0.
 Currently available for static plot.}
 
 \item{topSamplesCex}{cex for sample annotation (used when \code{topSamples} > 0)}
 
 \item{topSamplesVar}{variable of the phenoData used to label the samples, 
-by default: NULL, the sampleNames are used for labelling (used when \code{topSample}s > 0)}
+by default: NULL, the sampleNames are used for labelling 
+(used when \code{topSample}s > 0)}
 
-\item{topSamplesJust}{text justification for the samples (used when \code{topSamples} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
+\item{topSamplesJust}{text justification for the samples 
+(used when \code{topSamples} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
 by default: c(0.5, 0.5) so centered}
 
-\item{topSamplesColor}{text color for the samples (used when \code{topSamples} > 0), black by default}
+\item{topSamplesColor}{text color for the samples 
+(used when \code{topSamples} > 0), black by default}
 
-\item{geneSets}{list of gene sets/pathways, each containing identifiers of genes contained in the set.
-E.g. pathways from Gene Ontology databases output from the \code{\link{getGeneSetsForPlot}} function or any custom list of pathways.
-The genes identifiers should correspond to the variable \code{geneSetsVar} contained in the phenoData, if not specified
+\item{geneSets}{list of gene sets/pathways, each containing 
+identifiers of genes contained in the set.
+E.g. pathways from Gene Ontology databases output from the 
+\code{\link{getGeneSetsForPlot}} function or any custom list of pathways.
+The genes identifiers should correspond to the variable 
+\code{geneSetsVar} contained in the phenoData, if not specified
 the featureNames are used.
-If several gene sets have the same name, they will be combine to extract the top gene sets.}
+If several gene sets have the same name, they will be 
+combine to extract the top gene sets.}
 
-\item{geneSetsVar}{variable of the featureData used to match the genes contained in geneSets,
-most probably ENTREZID, if not specified the featureNames of the eSet are used
-Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
+\item{geneSetsVar}{variable of the featureData used to 
+match the genes contained in geneSets,
+most probably ENTREZID, if not specified the featureNames
+ of the eSet are used
+Only used when \code{topGeneSets} > 0 and the parameter 
+geneSets is specified.}
 
-\item{geneSetsMaxNChar}{maximum number of characters for pathway names, by default keep entire names
+\item{geneSetsMaxNChar}{maximum number of characters for pathway names, 
+by default keep entire names
 Only used when \code{topGeneSets} > 0 and the parameter \code{geneSets} is specified.
 If \code{returnAnalysis} is set to TRUE and \code{geneSetsMaxNChar} specified, 
 the top pathways will be returned in the output object, named with the identifiers used in the plot 
@@ -151,22 +184,30 @@ Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
 
 \item{topGeneSetsJust}{text justification for the gene sets 
 by default: c(0.5, 0.5) so centered
-Only used when \code{topGeneSets} > 0, the parameter \code{geneSets} is specified and if \code{packageTextLabel} is \code{ggplot2}.}
+Only used when \code{topGeneSets} > 0, the parameter \code{geneSets} 
+is specified and if \code{packageTextLabel} is \code{ggplot2}.}
 
-\item{topGeneSetsColor}{color for the gene sets (used when \code{topGeneSets} > 0 and \code{geneSets} is specified), black by default
+\item{topGeneSetsColor}{color for the gene sets 
+(used when \code{topGeneSets} > 0 and \code{geneSets} is specified), black by default
 Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
 
-\item{includeLegend}{logical if TRUE (by default) include a legend, otherwise not}
+\item{includeLegend}{logical if TRUE (by default) include a legend, 
+otherwise not}
 
-\item{includeLineOrigin}{if TRUE (by default) include vertical line at x = 0 and horizontal line at y = 0}
+\item{includeLineOrigin}{if TRUE (by default) include vertical line at 
+x = 0 and horizontal line at y = 0}
 
-\item{typePlot}{type of the plot returned, either 'static' (static) or interactive' (potentially interactive)}
+\item{typePlot}{type of the plot returned, either 'static' (static) or 
+interactive' (potentially interactive)}
 
-\item{packageInteractivity}{if \code{typePlot} is 'interactive', package used for interactive plot,
+\item{packageInteractivity}{if \code{typePlot} is 'interactive', 
+package used for interactive plot,
 either 'rbokeh' (by default) or 'ggvis'}
 
-\item{figInteractiveSize}{vector containing the size of the interactive plot, as [width, height]
-by default: c(600, 400). This is passed to the \code{width} and \code{height} parameters of:
+\item{figInteractiveSize}{vector containing the size of the interactive plot, 
+as [width, height]
+by default: c(600, 400). This is passed to the \code{width} and 
+\code{height} parameters of:
 \itemize{
  \item{for rbokeh plots: }{the \code{bokeh::figure} function}
  \item{for ggvis plots: }{the \code{ggvis::set_options} function}
@@ -178,7 +219,8 @@ overlapping legends when multiple legends}
 \item{interactiveTooltip}{logical, if TRUE, add hoover functionality showing
 sample annotation (variables used in the plot) in the plot}
 
-\item{interactiveTooltipExtraVars}{name of extra variable(s) (in varLabels of the \code{eset}) to add in tooltip to label the samples,
+\item{interactiveTooltipExtraVars}{name of extra variable(s) 
+(in varLabels of the \code{eset}) to add in tooltip to label the samples,
 NULL by default}
 
 \item{returnAnalysis}{logical, if TRUE (FALSE by default), return also the output of the analysis,
@@ -201,8 +243,11 @@ if \code{returnAnalysis} is TRUE, return a list:
 otherwise return only the plot
 }
 \description{
-\code{esetSpectralMap} reduces the dimension of the data contained in the \linkS4class{eSet} with the \code{mpm} function
+\code{esetSpectralMap} reduces the dimension of the data contained in the \linkS4class{eSet} with the \code{\link[mpm]{mpm}} function
  and plot the subsequent biplot of the specified dimensions, possibly with gene and sample annotation contained in the \linkS4class{eSet}.
+A spectral map with the default parameters is equivalent to a 
+principal component analysis on the log-transformed, double centered and 
+global normalized data (from documentation of the \code{\link[mpm]{mpm}} function).
 }
 \examples{
 library(ALL)

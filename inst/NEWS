@@ -1,3 +1,5 @@
+0.99.9
+	o update documentation
 0.99.8
 	o fix issue for ggplot2 plot when variable names contain space
 0.99.7

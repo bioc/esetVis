@@ -2,7 +2,7 @@
 % Please edit documentation in R/esetPlotWrapper.R
 \name{esetPlotWrapper}
 \alias{esetPlotWrapper}
-\title{wrapper for all the plots of the package}
+\title{wrapper for biplot of features/samples contained in a \linkS4class{eSet} object}
 \usage{
 esetPlotWrapper(dataPlotSamples, dataPlotGenes = NULL, esetUsed, xlab = "",
   ylab = "", colorVar = NULL, color = if (is.null(colorVar)) "black" else
@@ -27,11 +27,13 @@ esetPlotWrapper(dataPlotSamples, dataPlotGenes = NULL, esetUsed, xlab = "",
   "ggvis"), returnTopElements = FALSE)
 }
 \arguments{
-\item{dataPlotSamples}{data.frame with columns 'X', 'Y' with coordinates for the samples and with rownames which 
+\item{dataPlotSamples}{data.frame with columns 'X', 'Y' with coordinates 
+for the samples and with rownames which 
 should correspond and be in the same order as the sampleNames of
 \code{esetUsed}}
 
-\item{dataPlotGenes}{data.frame with two columns 'X' and 'Y' with coordinates for the genes}
+\item{dataPlotGenes}{data.frame with two columns 'X' and 'Y' with 
+coordinates for the genes}
 
 \item{esetUsed}{expressionSet (or SummarizedExperiment) object with data}
 
@@ -39,31 +41,45 @@ should correspond and be in the same order as the sampleNames of
 
 \item{ylab}{label for the y axis}
 
-\item{colorVar}{name of variable (in varLabels of the \code{eset}) used for coloring, NULL by default}
+\item{colorVar}{name of variable (in varLabels of the \code{eset}) used 
+for coloring, NULL by default}
 
-\item{color}{specified color(s) for the points, replicated if needed, used only if \code{colorVar} is NULL, a factor or character
-by default: 'black' if \code{colorVar} is not specified and default \code{ggplot} palette otherwise}
+\item{color}{specified color(s) for the points, replicated if needed, 
+used only if \code{colorVar} is NULL, a factor or character
+by default: 'black' if \code{colorVar} is not specified and default 
+\code{ggplot} palette otherwise}
 
-\item{shapeVar}{name of variable (in varLabels of the \code{eset}) used for the shape, NULL by default}
+\item{shapeVar}{name of variable (in varLabels of the \code{eset}) 
+used for the shape, NULL by default}
 
-\item{shape}{specified shape(s) (pch) for the points, replicated if needed, used only if \code{shapeVar} is NULL, a factor or character
-by default: '15' (filled square) if \code{shapeVar} is not specified and default \code{ggplot} shape(s) otherwise}
+\item{shape}{specified shape(s) (pch) for the points, replicated if 
+needed, used only if \code{shapeVar} is NULL, a factor or character
+by default: '15' (filled square) if \code{shapeVar} is not specified 
+and default \code{ggplot} shape(s) otherwise}
 
-\item{sizeVar}{name of variable (in varLabels of the \code{eset}) used for the size, NULL by default}
+\item{sizeVar}{name of variable (in varLabels of the \code{eset}) 
+used for the size, NULL by default}
 
-\item{size}{specified size(s) (cex) for the points, replicated if needed, used only if \code{sizeVar} is NULL, a factor or character
-by default: '2.5' if \code{sizeVar} is not specified and default \code{ggplot} size(s) otherwise}
+\item{size}{specified size(s) (cex) for the points, replicated if 
+needed, used only if \code{sizeVar} is NULL, a factor or character
+by default: '2.5' if \code{sizeVar} is not specified and default 
+\code{ggplot} size(s) otherwise}
 
-\item{sizeRange, }{size (cex) range used in the plot, possible only if the \code{sizeVar} is 'numeric' or 'integer'}
+\item{sizeRange, }{size (cex) range used in the plot, possible only 
+if the \code{sizeVar} is 'numeric' or 'integer'}
 
-\item{alphaVar}{name of variable (in varLabels of the \code{eset}) used for the transparency, NULL by default.
+\item{alphaVar}{name of variable (in varLabels of the \code{eset}) 
+used for the transparency, NULL by default.
 This parameter is currently only available for static plot.}
 
-\item{alpha}{specified transparency(s) for the points, replicated if needed, used only if \code{shapeVar} is NULL, a factor or character
-by default: '1' if \code{alphaVar} is not specified and default \code{ggplot} alpha otherwise
+\item{alpha}{specified transparency(s) for the points, replicated if 
+needed, used only if \code{shapeVar} is NULL, a factor or character
+by default: '1' if \code{alphaVar} is not specified and default 
+\code{ggplot} alpha otherwise
 This parameter is currently only available for static plot.}
 
-\item{alphaRange}{transparency (alpha) range used in the plot, possible only if the \code{alphaVar} is 'numeric' or 'integer'
+\item{alphaRange}{transparency (alpha) range used in the plot, 
+possible only if the \code{alphaVar} is 'numeric' or 'integer'
 This parameter is currently only available for static plot.}
 
 \item{title}{plot title, '' by default}
@@ -75,9 +91,11 @@ This parameter is currently only available for static plot.}
  \item{'none': }{axes by default (plot limits)}
 }}
 
-\item{cloudGenes}{logical, if TRUE (by default), include the cloud of genes in the spectral map}
+\item{cloudGenes}{logical, if TRUE (by default), include the 
+cloud of genes in the spectral map}
 
-\item{cloudGenesColor}{if \code{cloudGenes} is TRUE, color for the cloud of genes, black by default}
+\item{cloudGenesColor}{if \code{cloudGenes} is TRUE, 
+color for the cloud of genes, black by default}
 
 \item{cloudGenesNBins}{number of bins to used for the clouds of genes,
 by default the square root of the number of genes}
@@ -102,37 +120,51 @@ Currently only available for static plot.}
 \item{topGenesVar}{variable of the featureData used to label the genes, 
 by default: NULL, the featureNames are used for labelling (used when \code{topGenes} > 0)}
 
-\item{topGenesJust}{text justification for the genes (used when \code{topGenes} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
+\item{topGenesJust}{text justification for the genes 
+(used when \code{topGenes} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
 by default: c(0.5, 0.5) so centered}
 
-\item{topGenesColor}{text color for the genes (used when \code{topGenes} > 0), black by default}
+\item{topGenesColor}{text color for the genes 
+(used when \code{topGenes} > 0), black by default}
 
-\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) of samples
-most distant to the origin of the plot to annotate, by default: 10 samples are selected
+\item{topSamples}{numeric indicating which percentile (if <1) or number (if >=1) 
+of samples most distant to the origin of the plot to annotate, 
+by default: 10 samples are selected
 If no samples should be annotated, set this parameter to 0.
 Currently available for static plot.}
 
 \item{topSamplesCex}{cex for sample annotation (used when \code{topSamples} > 0)}
 
 \item{topSamplesVar}{variable of the phenoData used to label the samples, 
-by default: NULL, the sampleNames are used for labelling (used when \code{topSample}s > 0)}
+by default: NULL, the sampleNames are used for labelling 
+(used when \code{topSample}s > 0)}
 
-\item{topSamplesJust}{text justification for the samples (used when \code{topSamples} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
+\item{topSamplesJust}{text justification for the samples 
+(used when \code{topSamples} > 0 and if \code{packageTextLabel} is \code{ggplot2}),
 by default: c(0.5, 0.5) so centered}
 
-\item{topSamplesColor}{text color for the samples (used when \code{topSamples} > 0), black by default}
+\item{topSamplesColor}{text color for the samples 
+(used when \code{topSamples} > 0), black by default}
 
-\item{geneSets}{list of gene sets/pathways, each containing identifiers of genes contained in the set.
-E.g. pathways from Gene Ontology databases output from the \code{\link{getGeneSetsForPlot}} function or any custom list of pathways.
-The genes identifiers should correspond to the variable \code{geneSetsVar} contained in the phenoData, if not specified
+\item{geneSets}{list of gene sets/pathways, each containing 
+identifiers of genes contained in the set.
+E.g. pathways from Gene Ontology databases output from the 
+\code{\link{getGeneSetsForPlot}} function or any custom list of pathways.
+The genes identifiers should correspond to the variable 
+\code{geneSetsVar} contained in the phenoData, if not specified
 the featureNames are used.
-If several gene sets have the same name, they will be combine to extract the top gene sets.}
+If several gene sets have the same name, they will be 
+combine to extract the top gene sets.}
 
-\item{geneSetsVar}{variable of the featureData used to match the genes contained in geneSets,
-most probably ENTREZID, if not specified the featureNames of the eSet are used
-Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
+\item{geneSetsVar}{variable of the featureData used to 
+match the genes contained in geneSets,
+most probably ENTREZID, if not specified the featureNames
+ of the eSet are used
+Only used when \code{topGeneSets} > 0 and the parameter 
+geneSets is specified.}
 
-\item{geneSetsMaxNChar}{maximum number of characters for pathway names, by default keep entire names
+\item{geneSetsMaxNChar}{maximum number of characters for pathway names, 
+by default keep entire names
 Only used when \code{topGeneSets} > 0 and the parameter \code{geneSets} is specified.
 If \code{returnAnalysis} is set to TRUE and \code{geneSetsMaxNChar} specified, 
 the top pathways will be returned in the output object, named with the identifiers used in the plot 
@@ -149,19 +181,26 @@ Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
 
 \item{topGeneSetsJust}{text justification for the gene sets 
 by default: c(0.5, 0.5) so centered
-Only used when \code{topGeneSets} > 0, the parameter \code{geneSets} is specified and if \code{packageTextLabel} is \code{ggplot2}.}
+Only used when \code{topGeneSets} > 0, the parameter \code{geneSets} 
+is specified and if \code{packageTextLabel} is \code{ggplot2}.}
 
-\item{topGeneSetsColor}{color for the gene sets (used when \code{topGeneSets} > 0 and \code{geneSets} is specified), black by default
+\item{topGeneSetsColor}{color for the gene sets 
+(used when \code{topGeneSets} > 0 and \code{geneSets} is specified), black by default
 Only used when \code{topGeneSets} > 0 and the parameter geneSets is specified.}
 
-\item{includeLegend}{logical if TRUE (by default) include a legend, otherwise not}
+\item{includeLegend}{logical if TRUE (by default) include a legend, 
+otherwise not}
 
-\item{includeLineOrigin}{if TRUE (by default) include vertical line at x = 0 and horizontal line at y = 0}
+\item{includeLineOrigin}{if TRUE (by default) include vertical line at 
+x = 0 and horizontal line at y = 0}
 
-\item{typePlot}{type of the plot returned, either 'static' (static) or interactive' (potentially interactive)}
+\item{typePlot}{type of the plot returned, either 'static' (static) or 
+interactive' (potentially interactive)}
 
-\item{figInteractiveSize}{vector containing the size of the interactive plot, as [width, height]
-by default: c(600, 400). This is passed to the \code{width} and \code{height} parameters of:
+\item{figInteractiveSize}{vector containing the size of the interactive plot, 
+as [width, height]
+by default: c(600, 400). This is passed to the \code{width} and 
+\code{height} parameters of:
 \itemize{
  \item{for rbokeh plots: }{the \code{bokeh::figure} function}
  \item{for ggvis plots: }{the \code{ggvis::set_options} function}
@@ -173,13 +212,16 @@ overlapping legends when multiple legends}
 \item{interactiveTooltip}{logical, if TRUE, add hoover functionality showing
 sample annotation (variables used in the plot) in the plot}
 
-\item{interactiveTooltipExtraVars}{name of extra variable(s) (in varLabels of the \code{eset}) to add in tooltip to label the samples,
+\item{interactiveTooltipExtraVars}{name of extra variable(s) 
+(in varLabels of the \code{eset}) to add in tooltip to label the samples,
 NULL by default}
 
-\item{packageInteractivity}{if \code{typePlot} is 'interactive', package used for interactive plot,
+\item{packageInteractivity}{if \code{typePlot} is 'interactive', 
+package used for interactive plot,
 either 'rbokeh' (by default) or 'ggvis'}
 
-\item{returnTopElements}{logical, if TRUE (FALSE by default) return the outlying elements labelled in the plot (if any)}
+\item{returnTopElements}{logical, if TRUE (FALSE by default) 
+return the outlying elements labelled in the plot (if any)}
 }
 \value{
 if \code{typePlot} is:
@@ -188,8 +230,8 @@ if \code{typePlot} is:
    \itemize{
     \item{if \code{returnTopElements} is TRUE, and top elements can be displayed, a list with:}
      \itemize{
-      \item{the top elements labelled in the plot}
-	     \item{the \code{ggplot} object}
+      \item{'topElements': }{the top elements labelled in the plot}
+	     \item{'plot': }{the \code{ggplot} object}
       }
     \item{otherwise, the \code{ggplot} object only}
    }
@@ -197,7 +239,7 @@ if \code{typePlot} is:
 }
 }
 \description{
-wrapper for all the plots of the package
+Wrapper function used for all plots of the visualizations contained in the package.
 }
 \examples{
 library(ALL)

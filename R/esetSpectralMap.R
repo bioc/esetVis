@@ -1,13 +1,19 @@
 #' @title plot a spectral map biplot of an \linkS4class{eSet}.
-#' @description \code{esetSpectralMap} reduces the dimension of the data contained in the \linkS4class{eSet} with the \code{mpm} function
+#' @description \code{esetSpectralMap} reduces the dimension of the data contained in the \linkS4class{eSet} with the \code{\link[mpm]{mpm}} function
 #'  and plot the subsequent biplot of the specified dimensions, possibly with gene and sample annotation contained in the \linkS4class{eSet}.
+#' A spectral map with the default parameters is equivalent to a 
+#' principal component analysis on the log-transformed, double centered and 
+#' global normalized data (from documentation of the \code{\link[mpm]{mpm}} function).
 #' @param eset expressionSet (or SummarizedExperiment) object with data
 #' @param psids featureNames of genes to include in the plot, all by default
 #' @param dim dimensions of the analysis to represent, first two dimensions by default
-#' @param mpm.args arguments for the mpm function, by default:
-#' closure = 'none', center = 'double', normal = 'global', 'row.weight' = 'mean',
-#' col.weight = 'constant', logtrans = FALSE (assume that data are already in a log scale)
-#' @param plot.mpm.args arguments for the plot.mpm function
+#' @param mpm.args list with input parameters for the \code{\link[mpm]{mpm}} function.
+#' The default value is:
+#' \code{list(closure = 'none', center = 'double', normal = 'global', 'row.weight' = 'mean',
+#' col.weight = 'constant', logtrans = FALSE)}.
+#' This assumes that the data are already in a log scale.
+#' @param plot.mpm.args list with input parameters for the \code{\link[mpm]{plot.mpm}} function.
+#' The default value is: list(scale = "uvc").
 #' @param returnAnalysis logical, if TRUE (FALSE by default), return also the output of the analysis,
 #' and the outlying samples in the topElements element if any, otherwise only the plot object
 #' @inheritParams esetPlotWrapper
