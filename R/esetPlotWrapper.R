@@ -326,10 +326,11 @@ esetPlotWrapper <- function(
 					# ggplot2 2.0.0: stat_binhex() has been renamed to stat_bin_hex()
 					statBinHexFct <- ggplot2::stat_bin_hex
 					# ggplot2 2.1.0: output of stat_bin_hex() is now value instead of count.
-					fillAes <- if (utils::packageVersion("ggplot2") < "2.1.0")	'..count..'	else	'..value..'
+					fillAes <- if (utils::packageVersion("ggplot2") == "2.1.0")	'..value..'	else	'..count..'
 				}
 				
-				g <- g + statBinHexFct(ggplot2::aes_string(x = 'X', y = 'Y', fill = fillAes),
+				g <- g + statBinHexFct(
+					ggplot2::aes_string(x = 'X', y = 'Y', fill = fillAes),
 					data = dataPlotGenes, bins = cloudGenesNBins) +
 					ggplot2::scale_fill_gradientn(colours = c(baseFillColor, cloudGenesColor))#c(0.5, 0.8)
 				#if(includeLegend)	nLegendsSamples <- length(c(colorVar, shapeVar, sizeVar, alphaVar))
@@ -394,10 +395,15 @@ esetPlotWrapper <- function(
 			if(ylab != "")	g <- g + ggplot2::ylab(paste(ylab, "\n"))
 
 			# increase margin between ticks and axes labels
+			getElementText <- function(...)
+				if (utils::packageVersion("ggplot2") < "2.0.0")
+					ggplot2::element_text(...)	else
+					ggplot2::element_text(..., margin = unit(0.5, "lines"))
+
 			argsTheme <- c(
 				list(
 					# labels y axes centered on ticks
-					axis.text.y = ggplot2::element_text(vjust = 5),
+					axis.text.y = getElementText(vjust = 5),
 					# title x axis further away from the axes labels
 					axis.title.x = ggplot2::element_text(vjust = -1)
 				),
@@ -406,10 +412,8 @@ esetPlotWrapper <- function(
 					list(axis.ticks.margin = unit(0.5, "lines"))
 				# code for more recent version
 				}else{
-					list(
-						axis.text.x = ggplot2::element_text(margin = unit(0.5, "lines")),
-						axis.text.y = ggplot2::element_text(margin = unit(0.5, "lines"))
-					)
+					list(axis.text.x = ggplot2::element_text(
+						margin = unit(0.5, "lines")))
 				}
 			)
 			g <- g + do.call(ggplot2::theme, argsTheme)
@@ -435,7 +439,11 @@ esetPlotWrapper <- function(
 				& !is.null(alphaRange))	g <- g + ggplot2::scale_alpha(range = alphaRange)
 			
 			#add title
-			if(title != "")	g <- g + ggplot2::ggtitle(title)
+			if(title != "")	g <- g + 
+				ggplot2::ggtitle(title) +
+				# in version ggplot2 == 2.2.0 title is left adjusted by default
+				ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+			
 			
 			#theme
 			g <- g + ggplot2::theme_bw()
