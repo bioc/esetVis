@@ -76,7 +76,7 @@ perplexite parameter = optimal number of neighbours,
 theta = speed/accuracy trade-off (increase for less accuracy), set to 0.0 for exact TSNE}
 
 \item{fctTransformDataForInputTsne}{function which transform the data in the eSet object before
-calling the \code{\link[RTnse]{RTnse}} function. 
+calling the \code{\link[Rtsne]{Rtsne}} function. 
 This should be a function which takes a matrix as input and return a matrix, e.g. the dist function.}
 
 \item{symmetryAxes}{set symmetry for axes, either:
@@ -160,7 +160,7 @@ otherwise return only the plot
 }
 \description{
 \code{esetTsne} reduces the dimension of the data contained in the \linkS4class{eSet} via t-Distributed Stochastic Neighbor Embedding
- with the \code{\link[RTnse]{RTnse}} function and plot the subsequent biplot, possibly with sample annotation contained in the eSet.
+ with the \code{\link[Rtsne]{Rtsne}} function and plot the subsequent biplot, possibly with sample annotation contained in the eSet.
 }
 \examples{
 library(ALL)
