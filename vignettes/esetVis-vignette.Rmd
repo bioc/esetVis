@@ -498,7 +498,8 @@ interactive plot.
 		figInteractiveSize = c(700, 600),
 		size = 6,
 		# use all phenoData variables for hoover
-		interactiveTooltipExtraVars = varLabels(ALL))
+		interactiveTooltipExtraVars = varLabels(ALL)
+	)
 	
 ```
 

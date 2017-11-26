@@ -4,21 +4,22 @@
 \alias{esetTsne}
 \title{plot a t-SNE of an \linkS4class{eSet} object}
 \usage{
-esetTsne(eset, psids = 1:nrow(eset), trace = TRUE, colorVar = NULL,
-  color = if (is.null(colorVar)) "black" else NULL, shapeVar = NULL,
-  shape = if (is.null(shapeVar)) 15 else NULL, sizeVar = NULL, size = if
-  (is.null(sizeVar)) 2.5 else NULL, sizeRange = NULL, alphaVar = NULL,
-  alpha = if (is.null(alphaVar)) 1 else NULL, alphaRange = NULL,
+esetTsne(eset, psids = 1:nrow(eset), trace = TRUE, colorVar = character(),
+  color = if (length(colorVar) > 0) "black" else character(),
+  shapeVar = character(), shape = if (length(shapeVar) > 0) 15 else
+  numeric(), sizeVar = character(), size = if (length(sizeVar) > 0) 2.5 else
+  numeric(), sizeRange = numeric(), alphaVar = character(), alpha = if
+  (length(alphaVar) > 0) 1 else numeric(), alphaRange = numeric(),
   title = "", Rtsne.args = list(perplexity = floor((ncol(eset) - 1)/3),
   theta = 0.5, dims = 2, initial_dims = 50),
   fctTransformDataForInputTsne = NULL, symmetryAxes = c("combine",
   "separate", "none"), packageTextLabel = c("ggrepel", "ggplot2"),
-  topSamples = 10, topSamplesCex = 2.5, topSamplesVar = NULL,
+  topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(),
   topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
   includeLegend = TRUE, includeLineOrigin = TRUE, typePlot = c("static",
   "interactive"), packageInteractivity = c("rbokeh", "ggvis"),
   figInteractiveSize = c(600, 400), ggvisAdjustLegend = TRUE,
-  interactiveTooltip = TRUE, interactiveTooltipExtraVars = NULL,
+  interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
   returnAnalysis = FALSE)
 }
 \arguments{
@@ -29,26 +30,26 @@ esetTsne(eset, psids = 1:nrow(eset), trace = TRUE, colorVar = NULL,
 \item{trace}{logical, if TRUE (by default), print some messages during tsne is running}
 
 \item{colorVar}{name of variable (in varLabels of the \code{eset}) used 
-for coloring, NULL by default}
+for coloring, empty by default}
 
 \item{color}{specified color(s) for the points, replicated if needed, 
-used only if \code{colorVar} is NULL, a factor or character
+used only if \code{colorVar} is empty, a factor or character
 by default: 'black' if \code{colorVar} is not specified and default 
 \code{ggplot} palette otherwise}
 
 \item{shapeVar}{name of variable (in varLabels of the \code{eset}) 
-used for the shape, NULL by default}
+used for the shape, empty by default}
 
 \item{shape}{specified shape(s) (pch) for the points, replicated if 
-needed, used only if \code{shapeVar} is NULL, a factor or character
+needed, used only if \code{shapeVar} is empty, a factor or character
 by default: '15' (filled square) if \code{shapeVar} is not specified 
 and default \code{ggplot} shape(s) otherwise}
 
 \item{sizeVar}{name of variable (in varLabels of the \code{eset}) 
-used for the size, NULL by default}
+used for the size, empty by default}
 
 \item{size}{specified size(s) (cex) for the points, replicated if 
-needed, used only if \code{sizeVar} is NULL, a factor or character
+needed, used only if \code{sizeVar} is empty, a factor or character
 by default: '2.5' if \code{sizeVar} is not specified and default 
 \code{ggplot} size(s) otherwise}
 
@@ -56,11 +57,11 @@ by default: '2.5' if \code{sizeVar} is not specified and default
 if the \code{sizeVar} is 'numeric' or 'integer'}
 
 \item{alphaVar}{name of variable (in varLabels of the \code{eset}) 
-used for the transparency, NULL by default.
+used for the transparency, empty by default.
 This parameter is currently only available for static plot.}
 
 \item{alpha}{specified transparency(s) for the points, replicated if 
-needed, used only if \code{shapeVar} is NULL, a factor or character
+needed, used only if \code{shapeVar} is empty, a factor or character
 by default: '1' if \code{alphaVar} is not specified and default 
 \code{ggplot} alpha otherwise
 This parameter is currently only available for static plot.}
@@ -99,7 +100,7 @@ Currently available for static plot.}
 \item{topSamplesCex}{cex for sample annotation (used when \code{topSamples} > 0)}
 
 \item{topSamplesVar}{variable of the phenoData used to label the samples, 
-by default: NULL, the sampleNames are used for labelling 
+by default: empty, the sampleNames are used for labelling 
 (used when \code{topSample}s > 0)}
 
 \item{topSamplesJust}{text justification for the samples 
@@ -138,8 +139,8 @@ overlapping legends when multiple legends}
 sample annotation (variables used in the plot) in the plot}
 
 \item{interactiveTooltipExtraVars}{name of extra variable(s) 
-(in varLabels of the \code{eset}) to add in tooltip to label the samples,
-NULL by default}
+(in varLabels of the \code{eset}) to add in rbokehEsetPlot to label the samples,
+empty by default}
 
 \item{returnAnalysis}{logical, if TRUE (FALSE by default), return also the output of the analysis,
 and the outlying samples in the topElements element if any, otherwise only the plot object}
@@ -183,9 +184,6 @@ print(esetTsne(eset = ALL,
 	topSamplesJust = c(1, 0), topSamplesCex = 3)
 )
 }
-\author{
-Laure Cougnaud
-}
 \references{
 L.J.P. van der Maaten and G.E. Hinton (2008). Visualizing
 High-Dimensional Data Using t-SNE. Journal of Machine Learning
@@ -195,4 +193,6 @@ Research, 2579--2605
 the function used internally: \code{\link[Rtsne]{Rtsne}} or \url{http://homepage.tudelft.nl/19j49/t-SNE.html}
  for further explanations about this technique.
 }
-
+\author{
+Laure Cougnaud
+}

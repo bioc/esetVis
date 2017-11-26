@@ -4,7 +4,7 @@
 \alias{getCoordGeneSets}
 \title{extract coordinates gene sets}
 \usage{
-getCoordGeneSets(dataPlotGenes, geneSets, esetUsed, geneSetsVar = NULL)
+getCoordGeneSets(dataPlotGenes, geneSets, esetUsed, geneSetsVar = list())
 }
 \arguments{
 \item{dataPlotGenes}{data.frame with two columns 'X' and 'Y' with coordinates for the genes}
@@ -28,4 +28,3 @@ Laure Cougnaud
 
 Laure Cougnaud
 }
-

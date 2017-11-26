@@ -64,15 +64,16 @@
 esetSpectralMap <- function(eset, 
 	psids = 1:nrow(eset),
 	dim = c(1, 2),
-	colorVar = NULL, #color = "black", colorVarValues = NULL, 
-	color = if(is.null(colorVar))	"black"	else	NULL,
-	shapeVar = NULL, 
-	shape = if(is.null(shapeVar))	15	else	NULL,
-	sizeVar = NULL, 
-	size = if(is.null(sizeVar))	2.5	else	NULL, 
-	sizeRange = NULL, #c(1, 6),
-	alphaVar = NULL, 
-	alpha = if(is.null(alphaVar))	1	else	NULL,  alphaRange = NULL,
+	colorVar = character(),
+	color = if(length(colorVar) > 0)	"black"	else	character(),
+	shapeVar = character(), 
+	shape = if(length(shapeVar) > 0)	15	else	numeric(),
+	sizeVar = character(), 
+	size = if(length(sizeVar) > 0)	2.5	else	numeric(), 
+	sizeRange = numeric(), #c(1, 6),
+	alphaVar = character(), 
+	alpha = if(length(alphaVar) > 0)	1	else	numeric(),  
+	alphaRange = numeric(),
 	title = "", 
 	# assume that data are already log-transformed
 	mpm.args = list(closure = "none", center = "double", 
@@ -81,17 +82,19 @@ esetSpectralMap <- function(eset,
 	plot.mpm.args = list(scale = "uvc"),#except (x, dim, do.plot)
 	symmetryAxes = c("combine", "separate", "none"),
 	packageTextLabel = c("ggrepel", "ggplot2"),
-	cloudGenes = TRUE, cloudGenesColor = "black", cloudGenesNBins = sqrt(length(psids)), 
+	cloudGenes = TRUE, cloudGenesColor = "black", 
+	cloudGenesNBins = sqrt(length(psids)), 
 	cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
-	topGenes = 10, topGenesCex = 2.5, topGenesVar = NULL, topGenesJust = c(0.5, 0.5), topGenesColor = "black",
-	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = NULL, topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
-	geneSets = list(), geneSetsVar = NULL, geneSetsMaxNChar = NULL, 
+	topGenes = 10, topGenesCex = 2.5, topGenesVar = character(), topGenesJust = c(0.5, 0.5), topGenesColor = "black",
+	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(), 
+	topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
+	geneSets = list(), geneSetsVar = character(), geneSetsMaxNChar = numeric(), 
 	topGeneSets = 10, topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5), topGeneSetsColor = "black",
 	includeLegend = TRUE, includeLineOrigin = TRUE,
 	typePlot = c("static", "interactive"), packageInteractivity = c("rbokeh", "ggvis"),
 	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, 
-	interactiveTooltip = TRUE, interactiveTooltipExtraVars = NULL,
-	returnAnalysis = FALSE){
+	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
+	returnAnalysis = FALSE, returnEsetPlot = FALSE){
 	
 	symmetryAxes <- match.arg(symmetryAxes)
 	packageTextLabel <- match.arg(packageTextLabel)
@@ -163,7 +166,8 @@ esetSpectralMap <- function(eset,
 		interactiveTooltipExtraVars = interactiveTooltipExtraVars,
 		returnTopElements = returnAnalysis,
 		packageInteractivity = packageInteractivity,
-		packageTextLabel = packageTextLabel)
+		packageTextLabel = packageTextLabel,
+		returnEsetPlot = returnEsetPlot)
 
 	res <- if(!returnAnalysis)	plot else
 		c(

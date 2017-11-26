@@ -61,10 +61,9 @@ head(geneSets) # returns a pathway list of genes
 
 # see also vignette for an example of the use of this function as input for the esetSpectralMap, esetLda or esetPlotWrapper functions
 }
-\author{
-Laure Cougnaud
-}
 \seealso{
 the function used internally: \code{\link[MLP]{getGeneSets}}
 }
-
+\author{
+Laure Cougnaud
+}

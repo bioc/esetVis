@@ -4,10 +4,11 @@
 \alias{plotTopElements}
 \title{create \code{geom_text} object with top genes/sample/pathways}
 \usage{
-plotTopElements(top, type = c("gene", "sample", "geneSets"), var = NULL,
-  cex = 1, just = c(0.5, 0.5), color = "black", dataPlotGenes = NULL,
-  dataPlotSamples = NULL, esetUsed, geneSets = NULL, geneSetsVar = NULL,
-  geneSetsMaxNChar = NULL, returnTopElements = FALSE,
+plotTopElements(top, type = c("gene", "sample", "geneSets"),
+  var = character(), cex = 1, just = c(0.5, 0.5), color = "black",
+  dataPlotGenes = data.frame(), dataPlotSamples = data.frame(), esetUsed,
+  geneSets = list(), geneSetsVar = character(),
+  geneSetsMaxNChar = numeric(), returnTopElements = FALSE,
   packageTextLabel = c("ggrepel", "ggplot2"))
 }
 \arguments{
@@ -64,4 +65,3 @@ create \code{geom_text} object with top genes/sample/pathways
 \author{
 Laure Cougnaud
 }
-

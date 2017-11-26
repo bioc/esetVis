@@ -3,7 +3,7 @@
 #' on the specified grouping variable with the \code{lda} function and plot the subsequent biplot,
 #'  possibly with sample annotation and gene annotation contained in the eSet.
 #' @param eset expressionSet (or SummarizedExperiment) object with data
-#' @param ldaVar name of variable (in varLabels of the \code{eset}) used for grouping for lda, NULL by default
+#' @param ldaVar name of variable (in varLabels of the \code{eset}) used for grouping for lda
 #' @param psids featureNames of genes to include in the plot, all by default
 #' @param dim dimensions of the analysis to represent, first two dimensions by default
 #' @param returnAnalysis logical, if TRUE (FALSE by default), return also the output of the analysis,
@@ -50,27 +50,32 @@
 esetLda <- function(eset, ldaVar,
 	psids = 1:nrow(eset),
 	dim = c(1, 2),
-	colorVar = NULL, #color = "black", colorVarValues = NULL, 
-	color = if(is.null(colorVar))	"black"	else	NULL,
-	shapeVar = NULL, 
-	shape = if(is.null(shapeVar))	15	else	NULL,
-	sizeVar = NULL, 
-	size = if(is.null(sizeVar))	2.5	else	NULL, 
-	sizeRange = NULL, #c(1, 6),
-	alphaVar = NULL, 
-	alpha = if(is.null(alphaVar))	1	else	NULL, alphaRange = NULL,
+	colorVar = character(), 
+	color = if(length(colorVar) > 0)	"black"	else	character(),
+	shapeVar = character(), 
+	shape = if(length(shapeVar) > 0)	15	else	numeric(),
+	sizeVar = numeric(), 
+	size = if(length(sizeVar) > 0)	2.5	else	numeric(), 
+	sizeRange = numeric(), 
+	alphaVar = character(), 
+	alpha = if(length(alphaVar) > 0)	1	else	numeric(), 
+	alphaRange = numeric(),
 	title = "", 
 	symmetryAxes = c("combine", "separate", "none"),
 	packageTextLabel = c("ggrepel", "ggplot2"),
 	cloudGenes = TRUE, cloudGenesColor = "black", cloudGenesNBins = sqrt(length(psids)), 
 	cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
-	topGenes = 10, topGenesCex = 2.5, topGenesVar = NULL, topGenesJust = c(0.5, 0.5), topGenesColor = "black",
-	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = NULL, topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
-	geneSets = list(), geneSetsVar = NULL, geneSetsMaxNChar = NULL, topGeneSets = 10, 
+	topGenes = 10, topGenesCex = 2.5, topGenesVar = character(), 
+	topGenesJust = c(0.5, 0.5), topGenesColor = "black",
+	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(), 
+	topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
+	geneSets = list(), geneSetsVar = character(), geneSetsMaxNChar = numeric(), 
+	topGeneSets = 10, 
 	topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5), topGeneSetsColor = "black",
 	includeLegend = TRUE, includeLineOrigin = TRUE,
 	typePlot = c("static", "interactive"), packageInteractivity = c("rbokeh", "ggvis"),
-	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, interactiveTooltip = TRUE, interactiveTooltipExtraVars = NULL,
+	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, 
+	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
 	returnAnalysis = FALSE){
 	
 	packageTextLabel <- match.arg(packageTextLabel)
@@ -155,7 +160,8 @@ esetLda <- function(eset, ldaVar,
 	dataPlotGenes <- data.frame(corrVar, rownames(corrVar))
 	colnames(dataPlotGenes) <- c("X", "Y", "geneName")
 	
-	plot <- esetVis::esetPlotWrapper(dataPlotSamples = dataPlotSamples,
+	plot <- esetVis::esetPlotWrapper(
+		dataPlotSamples = dataPlotSamples,
 		dataPlotGenes = dataPlotGenes, 
 		esetUsed = esetUsed, 
 		colorVar = colorVar, color = color,

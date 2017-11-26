@@ -35,9 +35,9 @@
 #' @import Biobase
 plotTopElements <- function(top, 
 	type = c("gene", "sample", "geneSets"),
-	var = NULL, cex = 1, just = c(0.5, 0.5), color = "black",
-	dataPlotGenes = NULL, dataPlotSamples = NULL, esetUsed, 
-	geneSets = NULL, geneSetsVar = NULL, geneSetsMaxNChar = NULL,
+	var = character(), cex = 1, just = c(0.5, 0.5), color = "black",
+	dataPlotGenes = data.frame(), dataPlotSamples = data.frame(), esetUsed, 
+	geneSets = list(), geneSetsVar = character(), geneSetsMaxNChar = numeric(),
 	returnTopElements = FALSE,
 	packageTextLabel = c("ggrepel", "ggplot2")){
 
@@ -49,13 +49,13 @@ plotTopElements <- function(top,
 	
 	switch(type,
 			
-		'geneSets' = if(is.null(geneSets)|is.null(dataPlotGenes))
+		'geneSets' = if(length(geneSets) == 0|nrow(dataPlotGenes) == 0)
 			stop("`geneSets' and some 'dataPlotGenes' should be specified."),
 		
-		'gene' = if(is.null(dataPlotGenes))
+		'gene' = if(nrow(dataPlotGenes) == 0)
 			stop("'dataPlotGenes' should be specified."),
 		
-		'sample' = if(is.null(dataPlotSamples))
+		'sample' = if(nrow(dataPlotSamples) == 0)
 			stop("'dataPlotSamples' should be specified.")
 
 	)
@@ -88,13 +88,13 @@ plotTopElements <- function(top,
 	
 		labels <- if(type != "geneSets"){
 			
-			varInAnnot <- ifelse(is.null(var), "", var) %in% 
+			varInAnnot <- ifelse(length(var) == 0, "", var) %in% 
 				switch(type, 'gene' = esetMethods$fvarLabels, 'sample' = esetMethods$varLabels)(esetUsed)
 			if(!varInAnnot)	rownames(coorElementsKept)	else
 				switch(type, 'gene' = esetMethods$fData, 'sample' = esetMethods$pData)(esetUsed)[
 					rownames(coorElementsKept), var]	 
 			
-		}else	if(!is.null(geneSetsMaxNChar)){
+		}else	if(length(geneSetsMaxNChar) > 0){
 					res <- rownames(coorElementsKept)
 					names(res) <- substr(rownames(coorElementsKept), 1, geneSetsMaxNChar)
 					res
@@ -151,7 +151,7 @@ plotTopElements <- function(top,
 #' @author Laure Cougnaud
 #' @import Biobase
 #' @author Laure Cougnaud
-getCoordGeneSets <- function(dataPlotGenes, geneSets, esetUsed, geneSetsVar = NULL){
+getCoordGeneSets <- function(dataPlotGenes, geneSets, esetUsed, geneSetsVar = list()){
 	
 	# get methods depending on the class of the object
 	esetMethods <- getMethodsInputObjectEsetVis(esetUsed)
@@ -169,7 +169,8 @@ getCoordGeneSets <- function(dataPlotGenes, geneSets, esetUsed, geneSetsVar = NU
 	names(geneSetsVect) <- rep(names(geneSets), times = sapply(geneSets, length))
 	
 	# match with gene ID
-	useVarIDToMatch <- if(!is.null(geneSetsVar))	geneSetsVar %in% esetMethods$fvarLabels(esetUsed)	else	FALSE
+	useVarIDToMatch <- if(length(geneSetsVar) > 0)	
+		geneSetsVar %in% esetMethods$fvarLabels(esetUsed)	else	FALSE
 	system.time(geneSetsVectInEset <- esetMethods$featureNames(esetUsed)[
 		match(geneSetsVect, 
 			if(useVarIDToMatch)	esetMethods$fData(esetUsed)[, geneSetsVar]	else

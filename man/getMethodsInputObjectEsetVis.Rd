@@ -32,4 +32,3 @@ The package \code{SummarizedExperiment} should be available if \code{x} is of cl
 \author{
 Laure Cougnaud
 }
-
