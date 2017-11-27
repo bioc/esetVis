@@ -51,14 +51,18 @@ esetLda <- function(eset, ldaVar,
 	psids = 1:nrow(eset),
 	dim = c(1, 2),
 	colorVar = character(), 
-	color = if(length(colorVar) > 0)	"black"	else	character(),
+	color = if(length(colorVar) == 0)	"black"	else	character(),
 	shapeVar = character(), 
-	shape = if(length(shapeVar) > 0)	15	else	numeric(),
-	sizeVar = numeric(), 
-	size = if(length(sizeVar) > 0)	2.5	else	numeric(), 
+	shape = if(length(shapeVar) == 0)	15	else	numeric(),
+	sizeVar = character(), 
+	size = if(length(sizeVar) == 0){
+		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
+			packageInteractivity == "rbokeh", 5, 2.5
+		)
+	}else{numeric()},
 	sizeRange = numeric(), 
 	alphaVar = character(), 
-	alpha = if(length(alphaVar) > 0)	1	else	numeric(), 
+	alpha = if(length(alphaVar) == 0)	1	else	numeric(), 
 	alphaRange = numeric(),
 	title = "", 
 	symmetryAxes = c("combine", "separate", "none"),
@@ -76,7 +80,7 @@ esetLda <- function(eset, ldaVar,
 	typePlot = c("static", "interactive"), packageInteractivity = c("rbokeh", "ggvis"),
 	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, 
 	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
-	returnAnalysis = FALSE){
+	returnAnalysis = FALSE, returnEsetPlot = FALSE){
 	
 	packageTextLabel <- match.arg(packageTextLabel)
 	symmetryAxes <- match.arg(symmetryAxes)
@@ -184,7 +188,9 @@ esetLda <- function(eset, ldaVar,
 		figInteractiveSize = figInteractiveSize, 
 		ggvisAdjustLegend = ggvisAdjustLegend, interactiveTooltip = interactiveTooltip, interactiveTooltipExtraVars = interactiveTooltipExtraVars,
 		returnTopElements = returnAnalysis,
-		packageTextLabel = packageTextLabel)
+		packageTextLabel = packageTextLabel,
+		returnEsetPlot = returnEsetPlot
+	)
 
 	res <- if(!returnAnalysis)	plot else
 		c(

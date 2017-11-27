@@ -5,11 +5,13 @@
 \title{plot a t-SNE of an \linkS4class{eSet} object}
 \usage{
 esetTsne(eset, psids = 1:nrow(eset), trace = TRUE, colorVar = character(),
-  color = if (length(colorVar) > 0) "black" else character(),
-  shapeVar = character(), shape = if (length(shapeVar) > 0) 15 else
-  numeric(), sizeVar = character(), size = if (length(sizeVar) > 0) 2.5 else
-  numeric(), sizeRange = numeric(), alphaVar = character(), alpha = if
-  (length(alphaVar) > 0) 1 else numeric(), alphaRange = numeric(),
+  color = if (length(colorVar) == 0) "black" else character(),
+  shapeVar = character(), shape = if (length(shapeVar) == 0) 15 else
+  numeric(), sizeVar = character(), size = if (length(sizeVar) == 0) {    
+  ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 &&
+  packageInteractivity == "rbokeh", 5, 2.5) } else {     numeric() },
+  sizeRange = numeric(), alphaVar = character(), alpha = if
+  (length(alphaVar) == 0) 1 else numeric(), alphaRange = numeric(),
   title = "", Rtsne.args = list(perplexity = floor((ncol(eset) - 1)/3),
   theta = 0.5, dims = 2, initial_dims = 50),
   fctTransformDataForInputTsne = NULL, symmetryAxes = c("combine",
@@ -20,7 +22,7 @@ esetTsne(eset, psids = 1:nrow(eset), trace = TRUE, colorVar = character(),
   "interactive"), packageInteractivity = c("rbokeh", "ggvis"),
   figInteractiveSize = c(600, 400), ggvisAdjustLegend = TRUE,
   interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
-  returnAnalysis = FALSE)
+  returnAnalysis = FALSE, returnEsetPlot = FALSE)
 }
 \arguments{
 \item{eset}{expressionSet (or SummarizedExperiment) object with data}
@@ -144,6 +146,8 @@ empty by default}
 
 \item{returnAnalysis}{logical, if TRUE (FALSE by default), return also the output of the analysis,
 and the outlying samples in the topElements element if any, otherwise only the plot object}
+
+\item{returnEsetPlot}{logical, if TRUE return also the \link{esetPlot} object}
 }
 \value{
 if \code{returnAnalysis} is TRUE, return a list:

@@ -47,20 +47,26 @@ rbokehPlotEset <- function(object){
 		# can only specify color as palette for color ramp: don't use white at lower palette
 		paletteFctUsed <- colorRampPalette(
 			c(colorRampPalette(c("white", object@cloudGenesColor))(10)[2], object@cloudGenesColor))
+		hoverGenes <- object@dataPlotGenes
+		hoverGenes[, c("X", "Y")] <- round(hoverGenes[, c("X", "Y")], digits = 2)
 		g <- rbokeh::ly_hexbin(fig = g, 
 			data = object@dataPlotGenes, x = "X", y = "Y",
 			xbins = object@cloudGenesNBins, 
-			palette = paletteFctUsed, trans = sqrt)#, alpha = 0.8
+			palette = paletteFctUsed, trans = sqrt,
+			hover = hoverGenes
+		)#, alpha = 0.8
 		
 	}
 	
 	## samples plot
 	
 	# need to remove NA values for glyph?
-	idxRowsKept <- rowSums(is.na(dataPlotSamplesWithAnnotation[, 
-		c(object@colorVar, object@shapeVar, object@sizeVar), drop = FALSE])) == 0
-	dataPlotWithAnnotationWthtNA <- dataPlotSamplesWithAnnotation[idxRowsKept, ]
-	
+	varsPlot <- c(object@colorVar, object@shapeVar, object@sizeVar)
+	if(length(varsPlot) > 0){
+		idxRowsKept <- rowSums(is.na(dataPlotSamplesWithAnnotation[, varsPlot, drop = FALSE])) == 0
+		dataPlotWithAnnotationWthtNA <- dataPlotSamplesWithAnnotation[idxRowsKept, ]
+	}else	dataPlotSamplesWithAnnotation
+		
 	# possible to specify a data.frame for the hoover, 
 	# so add additional variables if requested
 	
@@ -71,16 +77,18 @@ rbokehPlotEset <- function(object){
 			!object@tooltipVars %in%  colnames(dataPlotWithAnnotationWthtNA)]
 	}else character()
 	
-	hoverDf <- if(object@includeTooltip)	
+	hoverDf <- if(object@includeTooltip){
+		hoverDf <- dataPlotWithAnnotationWthtNA
+		hoverDf[, c("X", "Y")] <- round(hoverDf[, c("X", "Y")], digits = 2)
 		if(length(tooltipVars) > 0){
-			hoverDf <- data.frame(dataPlotWithAnnotationWthtNA, 
-				esetMethods$pData(object@eset)[as.character(dataPlotWithAnnotationWthtNA$sampleName), tooltipVars]
+			hoverDf <- cbind.data.frame(hoverDf, 
+				esetMethods$pData(object@eset)[as.character(hoverDf$sampleName), tooltipVars]
 			)
 			colnames(hoverDf) <- c(colnames(dataPlotWithAnnotationWthtNA), tooltipVars)
-			hoverDf
-		}else	dataPlotWithAnnotationWthtNA	else	NULL
-	# remove redundant column
-	hoverDf <- as.data.frame(t(unique(t(hoverDf))))
+		}
+		# remove redundant column
+		hoverDf <- as.data.frame(t(unique(t(hoverDf))))
+	}else	NULL
 	
 	# samples plot
 	

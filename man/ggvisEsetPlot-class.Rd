@@ -4,9 +4,9 @@
 \name{ggvisEsetPlot-class}
 \alias{ggvisEsetPlot-class}
 \alias{ggvisEsetPlot}
-\title{a S4 for \code{ggvis} plot}
+\title{a S4 class for \code{ggvis} plot}
 \description{
-a S4 for \code{ggvis} plot
+a S4 class for \code{ggvis} plot
 }
 \section{Slots}{
 

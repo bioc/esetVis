@@ -21,6 +21,7 @@ setGeneric(name = "plotEset",
 setMethod("plotEset", "ggplotEsetPlot", function(object, returnEsetPlot){		
 	plot <- ggPlotEset(object)
 	res <- formatOutput(plot, object, "ggplot", returnEsetPlot)
+	return(res)
 })
 
 #' @aliases plotEset,ggvisEsetPlot-method
@@ -28,6 +29,7 @@ setMethod("plotEset", "ggplotEsetPlot", function(object, returnEsetPlot){
 setMethod("plotEset", "ggvisEsetPlot", function(object, returnEsetPlot){		
 	plot <- ggvisPlotEset(object)
 	res <- formatOutput(plot, object, "ggvis", returnEsetPlot)
+	return(res)
 })
 
 #' @aliases plotEset,rbokehEsetPlot-method
@@ -35,6 +37,7 @@ setMethod("plotEset", "ggvisEsetPlot", function(object, returnEsetPlot){
 setMethod("plotEset", "rbokehEsetPlot", function(object, returnEsetPlot){		
 	plot <- rbokehPlotEset(object)
 	res <- formatOutput(plot, object, "rbokeh", returnEsetPlot)
+	return(res)
 })
 
 #' generic for get axes limits

@@ -49,7 +49,7 @@
 #'  \item{'none': }{axes by default (plot limits)}
 #' }
 #' @param cloudGenes logical, if TRUE (by default), include the 
-#' cloud of genes in the spectral map
+#' cloud of genes in the plot
 #' @param cloudGenesColor if \code{cloudGenes} is TRUE, 
 #' color for the cloud of genes, black by default
 #' @param cloudGenesNBins number of bins to used for the clouds of genes,
@@ -209,14 +209,18 @@ esetPlotWrapper <- function(
 	dataPlotGenes = data.frame(), esetUsed, 
 	xlab = "", ylab = "",
 	colorVar = character(0), 
-	color = if(length(colorVar) > 0)	"black"	else	character(0),
+	color = if(length(colorVar) == 0)	"black"	else	character(0),
 	shapeVar = character(0), 
-	shape = if(length(shapeVar) > 0)	15	else	numeric(0),
+	shape = if(length(shapeVar) == 0)	15	else	numeric(0),
 	sizeVar = character(0), 
-	size = if(length(sizeVar) > 0)	2.5	else	numeric(0), 
+	size = if(length(sizeVar) == 0){
+		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
+			packageInteractivity == "rbokeh", 5, 2.5
+		)
+	}else{numeric()},
 	sizeRange = numeric(0), #c(1, 6),
 	alphaVar = character(0), 
-	alpha = if(length(alphaVar) > 0)	1	else	numeric(0), 
+	alpha = if(length(alphaVar) == 0)	1	else	numeric(0), 
 	alphaRange = numeric(0),
 	title = "", 
 	#assume that data are already log-transformed

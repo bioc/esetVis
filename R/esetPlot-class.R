@@ -148,7 +148,7 @@ esetPlot <- setClass("esetPlot",
 		shapeVar = "character", 
 		shape = "numeric", 
 		sizeVar = "character", 
-		size = "numeric", 
+		size = "numeric",
 		alphaVar = "character",
 		alpha = "numeric",
 		sizeRange = "numeric", 
@@ -184,8 +184,8 @@ esetPlot <- setClass("esetPlot",
 		cloudGenesTitleLegend = "character",
 		color = "black", 
 		shape = 15, 
-		size = 2.5, 
 		alpha = 1,
+		size = 2.5,
 		includeLineOrigin = TRUE,
 		title = "",	xlab = "", ylab = "", 
 		symmetryAxes = "combine",
@@ -266,14 +266,22 @@ esetPlotInteractive <- setClass("esetPlotInteractive",
 )
 
 #' a S4 class to represent \code{rbokeh} plots
+#' @slot size specified size(s) (cex) for the points, replicated if 
+#' needed, used only if \code{sizeVar} is empty, a factor or character
+#' by default: '5' if \code{sizeVar} is not specified and default 
+#' \code{ggplot} size(s) otherwise
 #' @author Laure Cougnaud
 #' @name rbokehEsetPlot-class
 #' @rdname rbokehEsetPlot-class
 #' @export
 #' @importFrom methods new
-rbokehEsetPlot <- setClass("rbokehEsetPlot", contains = "esetPlotInteractive")
+rbokehEsetPlot <- setClass("rbokehEsetPlot", 
+	slots = list(size = "numeric"),
+	prototype = list(size = 5),
+	contains = "esetPlotInteractive"
+)
 
-#' a S4 for \code{ggvis} plot
+#' a S4 class for \code{ggvis} plot
 #' @slot adjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 #' overlapping legends when multiple legends
 #' @author Laure Cougnaud
@@ -288,16 +296,3 @@ ggvisEsetPlot <- setClass("ggvisEsetPlot",
 	),
 	contains = "esetPlotInteractive"
 )
-
-
-
-#setMethod("initialize", "esetPlot", function(.Object, ...) {
-#			
-#	.Object <- callNextMethod()
-#	
-#	if(nrow(.Object@dataPlotGenes) > 0)
-#		.Object@cloudGenesNBins <- sqrt(nrow(.Object@dataPlotGenes))	
-#	
-#	.Object
-#	
-#})

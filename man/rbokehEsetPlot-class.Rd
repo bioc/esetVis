@@ -8,6 +8,15 @@
 \description{
 a S4 class to represent \code{rbokeh} plots
 }
+\section{Slots}{
+
+\describe{
+\item{\code{size}}{specified size(s) (cex) for the points, replicated if 
+needed, used only if \code{sizeVar} is empty, a factor or character
+by default: '5' if \code{sizeVar} is not specified and default 
+\code{ggplot} size(s) otherwise}
+}}
+
 \author{
 Laure Cougnaud
 }

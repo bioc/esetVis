@@ -59,14 +59,18 @@ esetTsne <- function(eset,
 	psids = 1:nrow(eset),
 	trace = TRUE,
 	colorVar = character(), 
-	color = if(length(colorVar) > 0)	"black"	else	character(),
+	color = if(length(colorVar) == 0)	"black"	else	character(),
 	shapeVar = character(), 
-	shape = if(length(shapeVar) > 0)	15	else	numeric(),
+	shape = if(length(shapeVar) == 0)	15	else	numeric(),
 	sizeVar = character(), 
-	size = if(length(sizeVar) > 0)	2.5	else	numeric(), 
+	size = if(length(sizeVar) == 0){
+		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
+			packageInteractivity == "rbokeh", 5, 2.5
+		)
+	}else{numeric()},
 	sizeRange = numeric(),
 	alphaVar = character(), 
-	alpha = if(length(alphaVar) > 0)	1	else	numeric(), 
+	alpha = if(length(alphaVar) == 0)	1	else	numeric(), 
 	alphaRange = numeric(),
 	title = "", 
 	#parameters for tsne
@@ -82,7 +86,7 @@ esetTsne <- function(eset,
 	packageInteractivity = c("rbokeh", "ggvis"),
 	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, 
 	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
-	returnAnalysis = FALSE){
+	returnAnalysis = FALSE, returnEsetPlot = FALSE){
 
 	symmetryAxes <- match.arg(symmetryAxes)
 	packageInteractivity <- match.arg(packageInteractivity)
@@ -137,7 +141,8 @@ esetTsne <- function(eset,
 		xlab = "X", ylab = "Y",
 		returnTopElements = returnAnalysis,
 		packageInteractivity = packageInteractivity,
-		packageTextLabel = packageTextLabel)
+		packageTextLabel = packageTextLabel,
+		returnEsetPlot = returnEsetPlot)
 	
 	res <- if(!returnAnalysis)	plot else
 		c(

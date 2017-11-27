@@ -50,7 +50,7 @@ simpleCap <- function(x) {
 formatOutput <- function(res, object, type, returnEsetPlot){
 	if(returnEsetPlot)
 		res <- c(
-			if(inherits(res, type))	list(res)	else	res,
+			if(inherits(res, type))	list(plot = res)	else	res,
 			list(esetPlot = object)
 		)
 	return(res)

@@ -65,14 +65,18 @@ esetSpectralMap <- function(eset,
 	psids = 1:nrow(eset),
 	dim = c(1, 2),
 	colorVar = character(),
-	color = if(length(colorVar) > 0)	"black"	else	character(),
+	color = if(length(colorVar) == 0)	"black"	else	character(),
 	shapeVar = character(), 
-	shape = if(length(shapeVar) > 0)	15	else	numeric(),
+	shape = if(length(shapeVar) == 0)	15	else	numeric(),
 	sizeVar = character(), 
-	size = if(length(sizeVar) > 0)	2.5	else	numeric(), 
+	size = if(length(sizeVar) == 0){
+		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
+			packageInteractivity == "rbokeh", 5, 2.5
+		)
+	}else{numeric()}, 
 	sizeRange = numeric(), #c(1, 6),
 	alphaVar = character(), 
-	alpha = if(length(alphaVar) > 0)	1	else	numeric(),  
+	alpha = if(length(alphaVar) == 0)	1	else	numeric(),  
 	alphaRange = numeric(),
 	title = "", 
 	# assume that data are already log-transformed
