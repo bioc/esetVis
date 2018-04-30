@@ -1,7 +1,7 @@
 Package: esetVis
 Type: Package
 Title: Visualizations of expressionSet Bioconductor object
-Version: 1.5.1
+Version: 1.6.0
 Date: 2018-01-19
 Author: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
 Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
