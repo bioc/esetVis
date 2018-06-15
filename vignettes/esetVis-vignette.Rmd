@@ -255,16 +255,25 @@ palette is specified via the `color` argument.
 Just for the demonstration, another visualization of the same dataset,
 using this time a continuous variable: _age_ for coloring and transparency, a
 factor for the size and _BT_ for the shape.
+Because the output is a `ggplot` object, any additional customization
+not implemented via specific parameters, the plot can be modified
+with additional `ggplot2` functions, e.g. with the color of the gradient.
 
-```{r ALL-esetSampleAnnotation2}
+```{r ALL-esetSampleAnnotation2, fig.height = 8}
 
-	print(esetSpectralMap(eset = ALL, 
+	gg <- esetSpectralMap(eset = ALL, 
 		title = "Acute lymphoblastic leukemia dataset \n Spectral map \n Sample annotation (2)",
 		colorVar = "age",
 		shapeVar = "BT", shape = 15+1:nlevels(ALL$BT),
 		sizeVar = "remissionType", size = c(2, 4, 6),
 		alphaVar = "age", alphaRange = c(0.2, 0.8),
-		topSamples = 0, topGenes = 0, cloudGenes = TRUE))
+		topSamples = 0, topGenes = 0, cloudGenes = TRUE)
+	# change color of gradient
+	library(ggplot2)
+	gg <- gg + scale_color_gradientn(colours = 
+		colorRampPalette(c("darkgreen", "gold"))(2)
+	)
+	print(gg)
 
 ```
 
