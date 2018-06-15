@@ -4,6 +4,7 @@
 \name{esetPlot-class}
 \alias{esetPlot-class}
 \alias{esetPlot}
+\alias{esetPlot}
 \alias{initialize,esetPlot-method}
 \title{An S4 class to represent \code{esetPlot} object
 expressionSet with visualization data from
@@ -20,6 +21,10 @@ dimension-reduction methods}
 S4 object of class \code{esetPlot}
 }
 \description{
+An S4 class to represent \code{esetPlot} object
+expressionSet with visualization data from
+dimension-reduction methods
+
 Constructor of the \link{esetPlot} class
 }
 \section{Slots}{
@@ -42,25 +47,26 @@ coordinates for the genes}
 \item{\code{colorVar}}{name of variable (in varLabels of the \code{eset}) used 
 for coloring, empty by default}
 
-\item{\code{color}}{specified color(s) for the points, replicated if needed, 
-used only if \code{colorVar} is empty, a factor or character
-by default: 'black' if \code{colorVar} is not specified and default 
+\item{\code{color}}{character or factor with specified color(s) for the points, 
+replicated if needed. This is used only if \code{colorVar} is empty.
+By default: 'black' if \code{colorVar} is not specified and default 
 \code{ggplot} palette otherwise}
 
 \item{\code{shapeVar}}{name of variable (in varLabels of the \code{eset}) 
 used for the shape, empty by default}
 
-\item{\code{shape}}{specified shape(s) (pch) for the points, replicated if 
-needed, used only if \code{shapeVar} is empty, a factor or character
-by default: '15' (filled square) if \code{shapeVar} is not specified 
+\item{\code{shape}}{character or factor with specified shape(s) (pch) for the points, 
+replicated if needed. This is used only if \code{shapeVar} is empty.
+By default: '15' (filled square) if \code{shapeVar} is not specified 
 and default \code{ggplot} shape(s) otherwise}
 
 \item{\code{sizeVar}}{name of variable (in varLabels of the \code{eset}) 
 used for the size, empty by default}
 
-\item{\code{size}}{specified size(s) (cex) for the points, replicated if 
-needed, used only if \code{sizeVar} is empty, a factor or character
-by default: '2.5' if \code{sizeVar} is not specified and default 
+\item{\code{size}}{size character or factor with specified size(s) (cex) for the points, 
+replicated if needed.
+This is used only if \code{sizeVar} is empty.
+By default: '2.5' if \code{sizeVar} is not specified and default 
 \code{ggplot} size(s) otherwise}
 
 \item{\code{sizeRange,}}{size (cex) range used in the plot, possible only 
@@ -70,9 +76,9 @@ if the \code{sizeVar} is 'numeric' or 'integer'}
 used for the transparency, empty by default.
 This parameter is currently only available for static plot.}
 
-\item{\code{alpha}}{specified transparency(s) for the points, replicated if 
-needed, used only if \code{shapeVar} is empty, a factor or character
-by default: '1' if \code{alphaVar} is not specified and default 
+\item{\code{alpha}}{alpha character or factor with specified transparency(s) for the points,
+replicated if needed. This is used only if \code{shapeVar} is empty. 
+By default: '1' if \code{alphaVar} is not specified and default 
 \code{ggplot} alpha otherwise
 This parameter is currently only available for static plot.}
 

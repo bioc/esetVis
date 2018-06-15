@@ -110,8 +110,9 @@ setMethod("getDataPlotSamplesWithAnnotation",
 			
 	esetMethods <- getMethodsInputObjectEsetVis(object@eset)		
 		
-	sampleAnnotation <- esetMethods$pData(object@eset)[, 
-		c(object@colorVar, object@shapeVar, object@sizeVar, object@alphaVar), 
+	sampleAnnotation <- esetMethods$pData(object@eset)[
+		rownames(object@dataPlotSamples), 
+		unique(c(object@colorVar, object@shapeVar, object@sizeVar, object@alphaVar)), 
 		drop = FALSE
 	]
 
@@ -119,8 +120,7 @@ setMethod("getDataPlotSamplesWithAnnotation",
 	
 	colnames(dataPlotWithAnnotation) <- c(
 		colnames(object@dataPlotSamples), 
-		c(object@colorVar, object@shapeVar, 
-			object@sizeVar, object@alphaVar)
+		colnames(sampleAnnotation)
 	)
 	
 	return(dataPlotWithAnnotation)

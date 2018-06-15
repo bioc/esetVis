@@ -1,3 +1,4 @@
 testsExtra/
 esetVis.Rcheck/
 .Rbuildignore
+*.html

@@ -13,30 +13,31 @@
 #' @slot ylab label for the y axis
 #' @slot colorVar name of variable (in varLabels of the \code{eset}) used 
 #' for coloring, empty by default
-#' @slot color specified color(s) for the points, replicated if needed, 
-#' used only if \code{colorVar} is empty, a factor or character
-#' by default: 'black' if \code{colorVar} is not specified and default 
+#' @slot color character or factor with specified color(s) for the points, 
+#' replicated if needed. This is used only if \code{colorVar} is empty.
+#' By default: 'black' if \code{colorVar} is not specified and default 
 #' \code{ggplot} palette otherwise
 #' @slot shapeVar name of variable (in varLabels of the \code{eset}) 
 #' used for the shape, empty by default
-#' @slot shape specified shape(s) (pch) for the points, replicated if 
-#' needed, used only if \code{shapeVar} is empty, a factor or character
-#' by default: '15' (filled square) if \code{shapeVar} is not specified 
+#' @slot shape character or factor with specified shape(s) (pch) for the points, 
+#' replicated if needed. This is used only if \code{shapeVar} is empty.
+#' By default: '15' (filled square) if \code{shapeVar} is not specified 
 #' and default \code{ggplot} shape(s) otherwise
 #' @slot sizeVar name of variable (in varLabels of the \code{eset}) 
 #' used for the size, empty by default
-#' @slot size specified size(s) (cex) for the points, replicated if 
-#' needed, used only if \code{sizeVar} is empty, a factor or character
-#' by default: '2.5' if \code{sizeVar} is not specified and default 
+#' @slot size size character or factor with specified size(s) (cex) for the points, 
+#' replicated if needed.
+#' This is used only if \code{sizeVar} is empty.
+#' By default: '2.5' if \code{sizeVar} is not specified and default 
 #' \code{ggplot} size(s) otherwise
 #' @slot sizeRange, size (cex) range used in the plot, possible only 
 #' if the \code{sizeVar} is 'numeric' or 'integer'
 #' @slot alphaVar name of variable (in varLabels of the \code{eset}) 
 #' used for the transparency, empty by default.
 #' This parameter is currently only available for static plot.
-#' @slot alpha specified transparency(s) for the points, replicated if 
-#' needed, used only if \code{shapeVar} is empty, a factor or character
-#' by default: '1' if \code{alphaVar} is not specified and default 
+#' @slot alpha alpha character or factor with specified transparency(s) for the points,
+#' replicated if needed. This is used only if \code{shapeVar} is empty. 
+#' By default: '1' if \code{alphaVar} is not specified and default 
 #' \code{ggplot} alpha otherwise
 #' This parameter is currently only available for static plot.
 #' @slot alphaRange transparency (alpha) range used in the plot, 
