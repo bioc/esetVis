@@ -164,7 +164,7 @@ ggPlotEset <- function(object){
 		g <- g + ggplot2::scale_alpha(range = object@alphaRange)
 	
 	# add title
-	if(object@title != "")	
+	if((is.character(object@title) && object@title != "") | (is.expression(object@title) & length(object@title) > 0))	
 		g <- g + ggplot2::ggtitle(object@title) +
 			# in version ggplot2 == 2.2.0 title is left adjusted by default
 			ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))

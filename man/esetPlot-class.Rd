@@ -40,10 +40,6 @@ coordinates for the genes}
 
 \item{\code{eset}}{expressionSet (or SummarizedExperiment) object with data}
 
-\item{\code{xlab}}{label for the x axis}
-
-\item{\code{ylab}}{label for the y axis}
-
 \item{\code{colorVar}}{name of variable (in varLabels of the \code{eset}) used 
 for coloring, empty by default}
 
@@ -85,8 +81,6 @@ This parameter is currently only available for static plot.}
 \item{\code{alphaRange}}{transparency (alpha) range used in the plot, 
 possible only if the \code{alphaVar} is 'numeric' or 'integer'
 This parameter is currently only available for static plot.}
-
-\item{\code{title}}{plot title, '' by default}
 
 \item{\code{symmetryAxes}}{set symmetry for axes, either:
 \itemize{
@@ -194,9 +188,5 @@ otherwise not}
 
 \item{\code{includeLineOrigin}}{if TRUE (by default) include vertical line at 
 x = 0 and horizontal line at y = 0}
-
-\item{\code{packageTextLabel}}{package used to label the outlying genes/samples/gene sets,
-either \code{ggrepel} (by default, only used if package \code{ggrepel} is available),
-or \code{ggplot2}}
 }}
 

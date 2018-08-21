@@ -5,6 +5,9 @@
 \alias{esetPlotInteractive-class}
 \alias{esetPlotInteractive}
 \title{a S4 class to represent interactive plots}
+\value{
+S4 object of class \code{esetPlotInteractive}
+}
 \description{
 a S4 class to represent interactive plots
 }
@@ -19,6 +22,12 @@ to add in rbokehEsetPlot to label the samples}
 
 \item{\code{sizePlot}}{vector containing the size of the interactive plot, 
 as [width, height], by default: c(600, 400).}
+
+\item{\code{title}}{string plot title, '' by default}
+
+\item{\code{xlab}}{string label for the x axis}
+
+\item{\code{ylab}}{string label for the y axis}
 }}
 
 \author{

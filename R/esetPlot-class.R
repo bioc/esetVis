@@ -9,8 +9,6 @@
 #' @slot dataPlotGenes data.frame with two columns 'X' and 'Y' with 
 #' coordinates for the genes
 #' @slot eset expressionSet (or SummarizedExperiment) object with data
-#' @slot xlab label for the x axis
-#' @slot ylab label for the y axis
 #' @slot colorVar name of variable (in varLabels of the \code{eset}) used 
 #' for coloring, empty by default
 #' @slot color character or factor with specified color(s) for the points, 
@@ -43,7 +41,6 @@
 #' @slot alphaRange transparency (alpha) range used in the plot, 
 #' possible only if the \code{alphaVar} is 'numeric' or 'integer'
 #' This parameter is currently only available for static plot.
-#' @slot title plot title, '' by default
 #' @slot symmetryAxes set symmetry for axes, either:
 #' \itemize{
 #'  \item{'combine' (by default): }{both axes are symmetric and with the same limits}
@@ -125,9 +122,6 @@
 #' otherwise not
 #' @slot includeLineOrigin if TRUE (by default) include vertical line at 
 #' x = 0 and horizontal line at y = 0
-#' @slot packageTextLabel package used to label the outlying genes/samples/gene sets,
-#' either \code{ggrepel} (by default, only used if package \code{ggrepel} is available),
-#' or \code{ggplot2}
 #' @return S4 object of class \code{esetPlot}
 #' @import Biobase
 #' @name esetPlot-class
@@ -155,8 +149,6 @@ esetPlot <- setClass("esetPlot",
 		sizeRange = "numeric", 
 		alphaRange = "numeric",
 		includeLineOrigin = "logical",
-		title = "character",
-		xlab = "character", ylab = "character", 
 		symmetryAxes = "character",
 		topGenes = "numeric", 
 		topGenesVar = "character", 
@@ -188,7 +180,6 @@ esetPlot <- setClass("esetPlot",
 		alpha = 1,
 		size = 2.5,
 		includeLineOrigin = TRUE,
-		title = "",	xlab = "", ylab = "", 
 		symmetryAxes = "combine",
 		topGenes = 10, 
 		topGenesCex = 2.5, 
@@ -226,20 +217,37 @@ setMethod("initialize", "esetPlot", function(.Object, ...) {
 			
 })
 
+
+
+#' @title S4 Class Union with character/expression/call
+#' @description This is used for the definition of the title/axes labels for the ggplot2 version
+setClassUnion(name = "characterORexpressionOrCall", members = c("character", "expression", "call"))
+
 #' a S4 class to represent \code{ggplot} plots
-#' @author Laure Cougnaud
-#' @param returnTopElements logical, if TRUE (FALSE by default) 
+#' @slot returnTopElements logical, if TRUE (FALSE by default) 
 #' return the outlying elements labelled in the plot (if any)
+#' @slot title string or expression with plot title, '' by default
+#' @slot xlab string or expression with label for the x axis
+#' @slot ylab string or expression with label for the y axis
+#' @return S4 object of class \code{ggplotEsetPlot}
+#' @author Laure Cougnaud
 #' @name ggplotEsetPlot-class
 #' @rdname ggplotEsetPlot-class
 #' @export
 #' @importFrom methods new
 ggplotEsetPlot <- setClass("ggplotEsetPlot", 
-	slots = c("returnTopElements" = "logical"),
-	prototype = list(returnTopElements = FALSE),
+	slots = c(
+		returnTopElements = "logical",
+		title = "characterORexpressionOrCall",
+		xlab = "characterORexpressionOrCall", 
+		ylab = "characterORexpressionOrCall"
+	),
+	prototype = list(
+		returnTopElements = FALSE,
+		title = "",	xlab = "", ylab = ""
+	),
 	contains = "esetPlot"
 )
-
 
 #' a S4 class to represent interactive plots
 #' @slot includeTooltip logical, if TRUE, add hoover functionality showing
@@ -248,6 +256,10 @@ ggplotEsetPlot <- setClass("ggplotEsetPlot",
 #' to add in rbokehEsetPlot to label the samples
 #' @slot sizePlot vector containing the size of the interactive plot, 
 #' as [width, height], by default: c(600, 400).
+#' @slot title string plot title, '' by default
+#' @slot xlab string label for the x axis
+#' @slot ylab string label for the y axis
+#' @return S4 object of class \code{esetPlotInteractive}
 #' @author Laure Cougnaud
 #' @name esetPlotInteractive-class
 #' @rdname esetPlotInteractive-class
@@ -255,13 +267,15 @@ ggplotEsetPlot <- setClass("ggplotEsetPlot",
 #' @importFrom methods new
 esetPlotInteractive <- setClass("esetPlotInteractive", 
 	slots = c(
-		"includeTooltip" = "logical",
-		"tooltipVars" = "character",
-		"sizePlot" = "numeric"
+		includeTooltip = "logical",
+		tooltipVars = "character",
+		sizePlot = "numeric",
+		title = "character", xlab = "character", ylab = "character"
 	),
 	prototype = list(
 		includeTooltip = TRUE,
-		sizePlot = c(600, 400)
+		sizePlot = c(600, 400),
+		title = "",	xlab = "", ylab = ""
 	),
 	contains = "esetPlot"
 )
@@ -271,6 +285,7 @@ esetPlotInteractive <- setClass("esetPlotInteractive",
 #' needed, used only if \code{sizeVar} is empty, a factor or character
 #' by default: '5' if \code{sizeVar} is not specified and default 
 #' \code{ggplot} size(s) otherwise
+#' @return S4 object of class \code{rbokehEsetPlot}
 #' @author Laure Cougnaud
 #' @name rbokehEsetPlot-class
 #' @rdname rbokehEsetPlot-class
@@ -285,6 +300,7 @@ rbokehEsetPlot <- setClass("rbokehEsetPlot",
 #' a S4 class for \code{ggvis} plot
 #' @slot adjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 #' overlapping legends when multiple legends
+#' @return S4 object of class \code{ggvisEsetPlot}
 #' @author Laure Cougnaud
 #' @name ggvisEsetPlot-class
 #' @rdname ggvisEsetPlot-class

@@ -5,6 +5,9 @@
 \alias{rbokehEsetPlot-class}
 \alias{rbokehEsetPlot}
 \title{a S4 class to represent \code{rbokeh} plots}
+\value{
+S4 object of class \code{rbokehEsetPlot}
+}
 \description{
 a S4 class to represent \code{rbokeh} plots
 }

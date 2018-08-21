@@ -5,13 +5,25 @@
 \alias{ggplotEsetPlot-class}
 \alias{ggplotEsetPlot}
 \title{a S4 class to represent \code{ggplot} plots}
-\arguments{
-\item{returnTopElements}{logical, if TRUE (FALSE by default) 
-return the outlying elements labelled in the plot (if any)}
+\value{
+S4 object of class \code{ggplotEsetPlot}
 }
 \description{
 a S4 class to represent \code{ggplot} plots
 }
+\section{Slots}{
+
+\describe{
+\item{\code{returnTopElements}}{logical, if TRUE (FALSE by default) 
+return the outlying elements labelled in the plot (if any)}
+
+\item{\code{title}}{string or expression with plot title, '' by default}
+
+\item{\code{xlab}}{string or expression with label for the x axis}
+
+\item{\code{ylab}}{string or expression with label for the y axis}
+}}
+
 \author{
 Laure Cougnaud
 }

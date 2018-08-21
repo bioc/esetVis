@@ -5,6 +5,9 @@
 \alias{ggvisEsetPlot-class}
 \alias{ggvisEsetPlot}
 \title{a S4 class for \code{ggvis} plot}
+\value{
+S4 object of class \code{ggvisEsetPlot}
+}
 \description{
 a S4 class for \code{ggvis} plot
 }

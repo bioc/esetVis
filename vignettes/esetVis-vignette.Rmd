@@ -132,6 +132,7 @@ added to the object, via the annotation package `hgu95av2.db`.
 	colorPalette <- c("dodgerblue", 
 		colorRampPalette(c("white","dodgerblue2", "darkblue"))(5)[-1], 
 		"red", colorRampPalette(c("white", "red3", "darkred"))(5)[-1])
+	names(colorPalette) <- levels(groupingVariable)
 	color <- groupingVariable; levels(color) <- colorPalette
 	
 	# reformat type of the remission
@@ -489,7 +490,7 @@ interactive plot.
 	esetSPMInteractive <- function(...)
 		esetSpectralMap(eset = ALL, 
 			title = paste("Acute lymphoblastic leukemia dataset - spectral map"),
-			colorVar = "BT", color = colorPalette,
+			colorVar = "BT", color = unname(colorPalette),
 			shapeVar = "sex",
 			alphaVar = "remissionType",
 			typePlot = "interactive", ...
