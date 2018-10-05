@@ -6,8 +6,8 @@
 \usage{
 plotTopElements(top, type = c("gene", "sample", "geneSets"),
   var = character(), cex = 1, just = c(0.5, 0.5), color = "black",
-  dataPlotGenes = data.frame(), dataPlotSamples = data.frame(), esetUsed,
-  geneSets = list(), geneSetsVar = character(),
+  dataPlotGenes = data.frame(), dataPlotSamples = data.frame(),
+  esetUsed, geneSets = list(), geneSetsVar = character(),
   geneSetsMaxNChar = numeric(), returnTopElements = FALSE,
   packageTextLabel = c("ggrepel", "ggplot2"))
 }

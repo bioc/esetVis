@@ -13,6 +13,12 @@ a S4 class for \code{ggvis} plot
 \describe{
 \item{\code{adjustLegend}}{logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 overlapping legends when multiple legends}
+
+\item{\code{alphaVar}}{name of numeric variable (in varLabels of the \code{eset}) 
+used for the transparency, empty by default.}
+
+\item{\code{alphaRange}}{transparency (alpha) range used in the plot, 
+c(0.1, 1) by default.}
 }}
 
 \author{

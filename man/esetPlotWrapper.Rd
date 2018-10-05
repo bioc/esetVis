@@ -6,11 +6,11 @@
 \usage{
 esetPlotWrapper(dataPlotSamples, dataPlotGenes = data.frame(), esetUsed,
   xlab = "", ylab = "", colorVar = character(0), color = if
-  (length(colorVar) == 0) "black" else character(0), shapeVar = character(0),
-  shape = if (length(shapeVar) == 0) 15 else numeric(0),
-  sizeVar = character(0), size = if (length(sizeVar) == 0) {    
-  ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 &&
-  packageInteractivity == "rbokeh", 5, 2.5) } else {     numeric() },
+  (length(colorVar) == 0) "black" else character(0),
+  shapeVar = character(0), shape = if (length(shapeVar) == 0) 15 else
+  numeric(0), sizeVar = character(0), size = if (length(sizeVar) == 0)
+  {     ifelse(typePlot == "interactive" && length(packageInteractivity) ==
+  1 && packageInteractivity == "rbokeh", 5, 2.5) } else {     numeric() },
   sizeRange = numeric(0), alphaVar = character(0), alpha = if
   (length(alphaVar) == 0) 1 else numeric(0), alphaRange = numeric(0),
   title = "", symmetryAxes = c("combine", "separate", "none"),
@@ -18,18 +18,20 @@ esetPlotWrapper(dataPlotSamples, dataPlotGenes = data.frame(), esetUsed,
   (nrow(dataPlotGenes) > 0) sqrt(nrow(dataPlotGenes)) else numeric(),
   cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
   packageTextLabel = c("ggrepel", "ggplot2"), topGenes = 10,
-  topGenesCex = 2.5, topGenesVar = character(0), topGenesJust = c(0.5,
-  0.5), topGenesColor = "black", topSamples = 10, topSamplesCex = 2.5,
-  topSamplesVar = character(0), topSamplesJust = c(0.5, 0.5),
-  topSamplesColor = "black", geneSets = list(),
-  geneSetsVar = character(0), geneSetsMaxNChar = numeric(0),
-  topGeneSets = 10, topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5),
+  topGenesCex = 2.5, topGenesVar = character(0),
+  topGenesJust = c(0.5, 0.5), topGenesColor = "black",
+  topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(0),
+  topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
+  geneSets = list(), geneSetsVar = character(0),
+  geneSetsMaxNChar = numeric(0), topGeneSets = 10,
+  topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5),
   topGeneSetsColor = "black", includeLegend = TRUE,
   includeLineOrigin = TRUE, typePlot = c("static", "interactive"),
   figInteractiveSize = c(600, 400), ggvisAdjustLegend = TRUE,
-  interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(0),
-  packageInteractivity = c("rbokeh", "ggvis"), returnTopElements = FALSE,
-  returnEsetPlot = FALSE)
+  interactiveTooltip = TRUE,
+  interactiveTooltipExtraVars = character(0),
+  packageInteractivity = c("rbokeh", "ggvis"),
+  returnTopElements = FALSE, returnEsetPlot = FALSE)
 }
 \arguments{
 \item{dataPlotSamples}{data.frame with columns 'X', 'Y' with coordinates 
@@ -76,17 +78,17 @@ if the \code{sizeVar} is 'numeric' or 'integer'}
 
 \item{alphaVar}{name of variable (in varLabels of the \code{eset}) 
 used for the transparency, empty by default.
-This parameter is currently only available for static plot.}
+This parameter is currently only available for static plot and ggvis (only numeric in this case).}
 
 \item{alpha}{character or factor with specified transparency(s) for the points,
 replicated if needed. This is used only if \code{shapeVar} is empty. 
 By default: '1' if \code{alphaVar} is not specified and default 
 \code{ggplot} alpha otherwise
-This parameter is currently only available for static plot.}
+This parameter is currently only available for static and ggvis.}
 
 \item{alphaRange}{transparency (alpha) range used in the plot, 
 possible only if the \code{alphaVar} is 'numeric' or 'integer'
-This parameter is currently only available for static plot.}
+This parameter is currently only available for static and ggvis plot.}
 
 \item{title}{plot title, '' by default}
 

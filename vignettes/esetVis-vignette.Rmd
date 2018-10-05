@@ -521,12 +521,10 @@ version of the plot is included.
 		
 	# embed a static version of the plot
 	library(ggvis)
-	knit_print.ggvis(
-		esetSPMInteractive(
-			packageInteractivity = "ggvis",
-			sizeVar = "age", sizeRange = c(2, 6),
-			figInteractiveSize = c(700, 600)
-		)
+	esetSPMInteractive(
+		packageInteractivity = "ggvis",
+		sizeVar = "age", sizeRange = c(2, 6),
+		figInteractiveSize = c(700, 600)
 	)
 
 ```

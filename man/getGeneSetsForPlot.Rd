@@ -5,8 +5,8 @@
 \title{get gene sets for plot of \linkS4class{eSet} object.}
 \usage{
 getGeneSetsForPlot(entrezIdentifiers, species = "Human",
-  geneSetSource = c("GOBP", "GOMF", "GOCC", "KEGG"), useDescription = TRUE,
-  trace = TRUE)
+  geneSetSource = c("GOBP", "GOMF", "GOCC", "KEGG"),
+  useDescription = TRUE, trace = TRUE)
 }
 \arguments{
 \item{entrezIdentifiers}{string with Entrez Gene identifiers of the genes of interest}

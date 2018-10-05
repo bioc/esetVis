@@ -33,15 +33,15 @@
 #' if the \code{sizeVar} is 'numeric' or 'integer'
 #' @param alphaVar name of variable (in varLabels of the \code{eset}) 
 #' used for the transparency, empty by default.
-#' This parameter is currently only available for static plot.
+#' This parameter is currently only available for static plot and ggvis (only numeric in this case).
 #' @param alpha character or factor with specified transparency(s) for the points,
 #' replicated if needed. This is used only if \code{shapeVar} is empty. 
 #' By default: '1' if \code{alphaVar} is not specified and default 
 #' \code{ggplot} alpha otherwise
-#' This parameter is currently only available for static plot.
+#' This parameter is currently only available for static and ggvis.
 #' @param alphaRange transparency (alpha) range used in the plot, 
 #' possible only if the \code{alphaVar} is 'numeric' or 'integer'
-#' This parameter is currently only available for static plot.
+#' This parameter is currently only available for static and ggvis plot.
 #' @param title plot title, '' by default
 #' @param symmetryAxes set symmetry for axes, either:
 #' \itemize{

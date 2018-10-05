@@ -10,13 +10,17 @@ ggvisPlotEset <- function(object){
 		stop(paste("The package 'ggvis' need to be loaded to create",
 			"interactive plots with ggvis."))
 	
-	if(length(object@alphaVar)  > 0)
-		warning("The transparency aesthetic (alpha) is not ",
-			"yet implemented for a ggvis interactive plot.")
-	
 	# bind data samples with annotation
 	dataPlotSamplesWithAnnotation <- getDataPlotSamplesWithAnnotation(object)
 
+	includeCloudGenes <- object@cloudGenes & length(object@dataPlotGenes) > 0
+	
+	# ggvis doesn't allow different variable type for same aes, here transparency of cloud of genes is numeric and sample can be a factor
+	alphaVar <- if(includeCloudGenes && length(object@alphaVar) > 0 && !is.numeric(dataPlotSamplesWithAnnotation[, object@alphaVar])){
+		warning("A factor variable for transparency cannot be used while cloud of genes is required so 'shapeVar' is ignored.")
+		character(0)
+	}else	object@alphaVar
+	
 	## sample plot
 	getProp <- function(type, typeVar)
 		if(length(typeVar) > 0)	list(ggvis::prop(type, as.name(typeVar)))
@@ -27,13 +31,13 @@ ggvisPlotEset <- function(object){
 		getProp("y", "Y"),
 		getProp("fill", object@colorVar),
 		getProp("shape", object@shapeVar),
-		getProp("size", object@sizeVar)
-	#getProp("opacity", alphaVar)
-	#if(interactiveTooltip)	list(props(key := ~"keyggvis"))
+		getProp("size", object@sizeVar),
+		getProp("opacity", alphaVar)
+		#if(interactiveTooltip)	list(props(key := ~"keyggvis"))
 	)
 	
 	## gene plot first
-	if(object@cloudGenes & length(object@dataPlotGenes) > 0){
+	if(includeCloudGenes){
 		
 		hexbinGeneData <- hexbin(
 			object@dataPlotGenes$X, 
@@ -48,11 +52,8 @@ ggvisPlotEset <- function(object){
 		
 		g <- ggvis::ggvis(x = ~xGene, y= ~yGene, data = hexbinGeneDataDf)
 		g <- ggvis::layer_points(vis = g, fillOpacity = ~geneCol, fill = object@cloudGenesColor)
-		g <- ggvis::hide_legend(vis = g, "fillOpacity") 
-		g <- ggvis::scale_numeric(vis = g, property = "opacity", trans = "sqrt")
-		
-		#				g %>% layer_points(data = dataPlotWithAnnotation, 
-		#					x=~X, y=~Y, fill =~getPropcolorVar, shape =~ shapeVar, size =~sizeVar)
+		g <- ggvis::hide_legend(vis = g, c("fillOpacity", "fill")) 
+		g <- ggvis::scale_numeric(vis = g, property = "fillOpacity", trans = "sqrt")
 		
 		# add sample plot to the gene plot
 		ggvisArgsSamplePlotWithGenePlot <- c(list(vis = g), ggvisArgsSamplePlot)
@@ -71,7 +72,9 @@ ggvisPlotEset <- function(object){
 		g <- ggvis::layer_points(g, shape := object@shape)
 	if(setFixElement(object@sizeVar, object@size))
 		g <- ggvis::layer_points(g, size := object@size)
-	
+	if(setFixElement(alphaVar, object@alpha))
+		g <- ggvis::layer_points(g, opacity := object@alpha)
+
 	setManualScaleGgvis <- function(g, typeVar, nameVar, valVar, typeScale = "logical"){
 		values <- if(length(valVar) > 0)	
 			formatManualScale(x = dataPlotSamplesWithAnnotation, valVar, nameVar)
@@ -81,13 +84,22 @@ ggvisPlotEset <- function(object){
 		)
 	}	
 	
-	#manual specifications: custom scales
+
+	
+	# manual specifications: custom scales
 	if (setManualScale(dataPlotSamplesWithAnnotation, object@colorVar, object@color))	
 		g <- setManualScaleGgvis(g, typeVar = "fill", nameVar = object@colorVar, valVar = object@color)
 	if (setManualScale(dataPlotSamplesWithAnnotation, object@shapeVar, object@shape))	
 		g <- setManualScaleGgvis(g, typeVar = "shape", nameVar = object@shapeVar, valVar = object@shape)
 	if (setManualScale(dataPlotSamplesWithAnnotation, object@sizeVar, object@size))	
 		g <- setManualScaleGgvis(g, typeVar = "size", nameVar = object@sizeVar, valVar = object@size)
+	
+	# need to specify range for transparence
+	alphaRange <- if(length(object@alphaRange) == 0){
+		c(0.1, 1)
+	}else	object@alphaRange
+	if (length(alphaVar) > 0)
+		g <- g %>% scale_ordinal(property = "opacity", range = alphaRange)
 	
 	#plot axes labels and title
 	g <- ggvis::add_axis(vis = g, "x", title = object@xlab)
@@ -133,22 +145,23 @@ ggvisPlotEset <- function(object){
 		height = figInteractiveSize[2]
 	)
 	
-	#			orderLegendLog <- c(!is.null(colorVar), !is.null(shapeVar), !is.null(sizeVar))
-	#			names(orderLegendLog) <- c("fill", "shape", "size")
+#	orderLegendLog <- c(!is.null(colorVar), !is.null(shapeVar), !is.null(sizeVar))
+#	names(orderLegendLog) <- c("fill", "shape", "size")
 	#			if(sum(orderLegendLog) > 0){
 	#				legendToSet <- names(orderLegendLog)[orderLegendLog]
 	#				argsAddLegend <- c(as.list(legendToSet), list(orient = "right"))
 	#				g <- g %>% do.call("add_legend", argsAddLegend)
 	#			}
 	
-	#g <- g %>% set_options(duration = 0)
-	
 	# adjust legend manually because overlap if several present
 	# only if the window size is numeric (not auto)
 	# this will be fixed in future version of ggvis? 
 	
 	orderLegendLog <- c(
-		length(object@colorVar) > 0, length(object@shapeVar) > 0, length(object@sizeVar) > 0)
+		length(object@colorVar) > 0, 
+		length(object@shapeVar) > 0, 
+		length(object@sizeVar) > 0
+	)
 	names(orderLegendLog) <- c("fill", "shape", "size")
 	legendToSet <- names(orderLegendLog)[orderLegendLog]
 	
@@ -164,7 +177,7 @@ ggvisPlotEset <- function(object){
 		
 		for(i in 1:length(legendToSet))
 			g <- setLegendPos(vis = g, typeVar = legendToSet[i],
-				y = (i-1) * figInteractiveSize[2]/(length(legendToSet) + 1))
+				y = (i-1) * figInteractiveSize[2]/length(legendToSet))
 		
 		# for legend side by side in x direction
 		#					setLegendPos <- function(vis, typeVar, x)
@@ -229,6 +242,9 @@ ggvisPlotEset <- function(object){
 	}
 		
 	## TODO: annotation top genes/samples, at the end to avoid overlapping with plot
+	
+	# to keep legend separated
+	g <- g %>% set_options(duration = 0)
 	
 	return(g)
 	
