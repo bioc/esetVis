@@ -4,7 +4,6 @@
 \name{esetPlot-class}
 \alias{esetPlot-class}
 \alias{esetPlot}
-\alias{esetPlot}
 \alias{initialize,esetPlot-method}
 \title{An S4 class to represent \code{esetPlot} object
 expressionSet with visualization data from
@@ -21,10 +20,6 @@ dimension-reduction methods}
 S4 object of class \code{esetPlot}
 }
 \description{
-An S4 class to represent \code{esetPlot} object
-expressionSet with visualization data from
-dimension-reduction methods
-
 Constructor of the \link{esetPlot} class
 }
 \section{Slots}{
@@ -69,18 +64,16 @@ By default: '2.5' if \code{sizeVar} is not specified and default
 if the \code{sizeVar} is 'numeric' or 'integer'}
 
 \item{\code{alphaVar}}{name of variable (in varLabels of the \code{eset}) 
-used for the transparency, empty by default.
-This parameter is currently only available for static plot.}
+used for the transparency, empty by default.}
 
 \item{\code{alpha}}{alpha character or factor with specified transparency(s) for the points,
 replicated if needed. This is used only if \code{shapeVar} is empty. 
 By default: '1' if \code{alphaVar} is not specified and default 
-\code{ggplot} alpha otherwise
-This parameter is currently only available for static plot.}
+\code{ggplot} alpha otherwise.}
 
 \item{\code{alphaRange}}{transparency (alpha) range used in the plot, 
 possible only if the \code{alphaVar} is 'numeric' or 'integer'
-This parameter is currently only available for static plot.}
+This parameter is not available for rbokeh plot.}
 
 \item{\code{symmetryAxes}}{set symmetry for axes, either:
 \itemize{

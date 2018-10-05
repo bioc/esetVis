@@ -12,7 +12,7 @@ rbokehPlotEset <- function(object){
 	
 	if(length(object@alphaVar) > 0 && is.factor(esetMethods$pData(object@eset)[, object@alphaVar])){
 		warning("The transparency aesthetic (alpha) is not ",
-			"yet implemented for factors in rbokeh interactive plot,",
+			"yet implemented for factors in rbokeh interactive plot, ",
 			"so no transparency is used.")
 		alphaVar <- NULL; alpha <- 1
 	}else{alphaVar <- object@alphaVar; alpha <- object@alpha}
@@ -36,7 +36,6 @@ rbokehPlotEset <- function(object){
 			list(xlim = axesLimits[, "x"], ylim = axesLimits[, "y"]),
 		list(xgrid = FALSE, ygrid = FALSE)
 	)
-	#if(is.null(argsFigure))	argsFigure <- list(NULL)
 	g <- do.call(rbokeh::figure, argsFigure)
 	
 	# add axes limits
@@ -49,8 +48,10 @@ rbokehPlotEset <- function(object){
 			c(colorRampPalette(c("white", object@cloudGenesColor))(10)[2], object@cloudGenesColor))
 		hoverGenes <- object@dataPlotGenes
 		hoverGenes[, c("X", "Y")] <- round(hoverGenes[, c("X", "Y")], digits = 2)
-		g <- rbokeh::ly_hexbin(fig = g, 
-			data = object@dataPlotGenes, x = "X", y = "Y",
+		g <- rbokeh::ly_hexbin(
+			fig = g, 
+			x = object@dataPlotGenes$X, 
+			y = object@dataPlotGenes$Y,
 			xbins = object@cloudGenesNBins, 
 			palette = paletteFctUsed, trans = sqrt,
 			hover = hoverGenes

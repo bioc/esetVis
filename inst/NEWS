@@ -1,3 +1,7 @@
+1.7.3
+  o vignette: use print rather 'knit_print.ggvis'
+  o ggvis: include transparency, fix issue position legend
+  o rbokeh: use vector instead of column names for ly_hexbin
 1.7.2
   o ggplotEsetPlot: enable title/axes labels of type expression
 1.7.1

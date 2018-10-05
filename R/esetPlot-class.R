@@ -32,15 +32,13 @@
 #' if the \code{sizeVar} is 'numeric' or 'integer'
 #' @slot alphaVar name of variable (in varLabels of the \code{eset}) 
 #' used for the transparency, empty by default.
-#' This parameter is currently only available for static plot.
 #' @slot alpha alpha character or factor with specified transparency(s) for the points,
 #' replicated if needed. This is used only if \code{shapeVar} is empty. 
 #' By default: '1' if \code{alphaVar} is not specified and default 
-#' \code{ggplot} alpha otherwise
-#' This parameter is currently only available for static plot.
+#' \code{ggplot} alpha otherwise.
 #' @slot alphaRange transparency (alpha) range used in the plot, 
 #' possible only if the \code{alphaVar} is 'numeric' or 'integer'
-#' This parameter is currently only available for static plot.
+#' This parameter is not available for rbokeh plot.
 #' @slot symmetryAxes set symmetry for axes, either:
 #' \itemize{
 #'  \item{'combine' (by default): }{both axes are symmetric and with the same limits}
@@ -300,6 +298,10 @@ rbokehEsetPlot <- setClass("rbokehEsetPlot",
 #' a S4 class for \code{ggvis} plot
 #' @slot adjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 #' overlapping legends when multiple legends
+#' @slot alphaVar name of numeric variable (in varLabels of the \code{eset}) 
+#' used for the transparency, empty by default.
+#' @slot alphaRange transparency (alpha) range used in the plot, 
+#' c(0.1, 1) by default.
 #' @return S4 object of class \code{ggvisEsetPlot}
 #' @author Laure Cougnaud
 #' @name ggvisEsetPlot-class
@@ -309,7 +311,8 @@ rbokehEsetPlot <- setClass("rbokehEsetPlot",
 ggvisEsetPlot <- setClass("ggvisEsetPlot", 
 	slots = c("adjustLegend" = "logical"),
 	prototype = list(
-		adjustLegend = TRUE
+		adjustLegend = TRUE,
+		alphaRange = c(0.1, 1)
 	),
 	contains = "esetPlotInteractive"
 )
