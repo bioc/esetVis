@@ -282,14 +282,11 @@ rbokehEsetPlot <- setClass("rbokehEsetPlot",
 #' a S4 class for \code{ggvis} plot
 #' @slot adjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 #' overlapping legends when multiple legends
-<<<<<<< HEAD
-=======
 #' @slot alphaVar name of numeric variable (in varLabels of the \code{eset}) 
 #' used for the transparency, empty by default.
 #' @slot alphaRange transparency (alpha) range used in the plot, 
 #' c(0.1, 1) by default.
 #' @return S4 object of class \code{ggvisEsetPlot}
->>>>>>> d188fbb... fix issue with 'knit_print.ggvis'
 #' @author Laure Cougnaud
 #' @name ggvisEsetPlot-class
 #' @rdname ggvisEsetPlot-class
