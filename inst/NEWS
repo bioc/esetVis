@@ -1,6 +1,7 @@
 1.19.1
   o default for typePlot: fix issue length > 1 in coercion to logical
   o fix for ggplot2 >= 3.3.4: replace guides(fill = FALSE) by guides(fill = 'none')
+  o fix few notes check SummarizedExperiment + ggvis
 1.7.3
   o vignette: use print rather 'knit_print.ggvis'
   o ggvis: include transparency, fix issue position legend

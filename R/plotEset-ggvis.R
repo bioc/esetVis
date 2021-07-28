@@ -99,7 +99,7 @@ ggvisPlotEset <- function(object){
 		c(0.1, 1)
 	}else	object@alphaRange
 	if (length(alphaVar) > 0)
-		g <- g %>% scale_ordinal(property = "opacity", range = alphaRange)
+		g <- ggvis::scale_ordinal(vis = g, property = "opacity", range = alphaRange)
 	
 	#plot axes labels and title
 	g <- ggvis::add_axis(vis = g, "x", title = object@xlab)
@@ -244,7 +244,7 @@ ggvisPlotEset <- function(object){
 	## TODO: annotation top genes/samples, at the end to avoid overlapping with plot
 	
 	# to keep legend separated
-	g <- g %>% set_options(duration = 0)
+	g <- ggvis::set_options(vis = g, duration = 0)
 	
 	return(g)
 	

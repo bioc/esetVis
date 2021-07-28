@@ -45,11 +45,11 @@ getMethodsInputObjectEsetVis <- function(x){
 			list(
 				sampleNames = colnames,
 				featureNames = rownames,
-				fData = rowData, 
-				pData = colData,
-				exprs = assay,
-				varLabels = function(x) colnames(colData(x)),
-				fvarLabels = function(x) colnames(rowData(x))
+				fData = SummarizedExperiment::rowData, 
+				pData = SummarizedExperiment::colData,
+				exprs = SummarizedExperiment::assay,
+				varLabels = function(x) colnames(SummarizedExperiment::colData(x)),
+				fvarLabels = function(x) colnames(SummarizedExperiment::rowData(x))
 			)
 		)
 		
