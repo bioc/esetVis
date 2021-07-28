@@ -4,32 +4,58 @@
 \alias{esetLda}
 \title{plot a biplot of a linear discriminant analysis of an \linkS4class{eSet} object}
 \usage{
-esetLda(eset, ldaVar, psids = 1:nrow(eset), dim = c(1, 2),
-  colorVar = character(), color = if (length(colorVar) == 0) "black"
-  else character(), shapeVar = character(), shape = if
-  (length(shapeVar) == 0) 15 else numeric(), sizeVar = character(),
-  size = if (length(sizeVar) == 0) {     ifelse(typePlot == "interactive"
-  && length(packageInteractivity) == 1 && packageInteractivity == "rbokeh",
-  5, 2.5) } else {     numeric() }, sizeRange = numeric(),
-  alphaVar = character(), alpha = if (length(alphaVar) == 0) 1 else
-  numeric(), alphaRange = numeric(), title = "",
+esetLda(
+  eset,
+  ldaVar,
+  psids = 1:nrow(eset),
+  dim = c(1, 2),
+  colorVar = character(),
+  color = if (length(colorVar) == 0) "black" else character(),
+  shapeVar = character(),
+  shape = if (length(shapeVar) == 0) 15 else numeric(),
+  sizeVar = character(),
+  size = if (length(sizeVar) == 0) {     ifelse(typePlot[1] == "interactive" &&
+    packageInteractivity[1] == "rbokeh", 5, 2.5) } else {     numeric() },
+  sizeRange = numeric(),
+  alphaVar = character(),
+  alpha = if (length(alphaVar) == 0) 1 else numeric(),
+  alphaRange = numeric(),
+  title = "",
   symmetryAxes = c("combine", "separate", "none"),
-  packageTextLabel = c("ggrepel", "ggplot2"), cloudGenes = TRUE,
-  cloudGenesColor = "black", cloudGenesNBins = sqrt(length(psids)),
-  cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
-  topGenes = 10, topGenesCex = 2.5, topGenesVar = character(),
-  topGenesJust = c(0.5, 0.5), topGenesColor = "black",
-  topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(),
-  topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
-  geneSets = list(), geneSetsVar = character(),
-  geneSetsMaxNChar = numeric(), topGeneSets = 10,
-  topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5),
-  topGeneSetsColor = "black", includeLegend = TRUE,
-  includeLineOrigin = TRUE, typePlot = c("static", "interactive"),
+  packageTextLabel = c("ggrepel", "ggplot2"),
+  cloudGenes = TRUE,
+  cloudGenesColor = "black",
+  cloudGenesNBins = sqrt(length(psids)),
+  cloudGenesIncludeLegend = FALSE,
+  cloudGenesTitleLegend = "nGenes",
+  topGenes = 10,
+  topGenesCex = 2.5,
+  topGenesVar = character(),
+  topGenesJust = c(0.5, 0.5),
+  topGenesColor = "black",
+  topSamples = 10,
+  topSamplesCex = 2.5,
+  topSamplesVar = character(),
+  topSamplesJust = c(0.5, 0.5),
+  topSamplesColor = "black",
+  geneSets = list(),
+  geneSetsVar = character(),
+  geneSetsMaxNChar = numeric(),
+  topGeneSets = 10,
+  topGeneSetsCex = 2.5,
+  topGeneSetsJust = c(0.5, 0.5),
+  topGeneSetsColor = "black",
+  includeLegend = TRUE,
+  includeLineOrigin = TRUE,
+  typePlot = c("static", "interactive"),
   packageInteractivity = c("rbokeh", "ggvis"),
-  figInteractiveSize = c(600, 400), ggvisAdjustLegend = TRUE,
-  interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
-  returnAnalysis = FALSE, returnEsetPlot = FALSE)
+  figInteractiveSize = c(600, 400),
+  ggvisAdjustLegend = TRUE,
+  interactiveTooltip = TRUE,
+  interactiveTooltipExtraVars = character(),
+  returnAnalysis = FALSE,
+  returnEsetPlot = FALSE
+)
 }
 \arguments{
 \item{eset}{expressionSet (or SummarizedExperiment) object with data}

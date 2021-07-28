@@ -70,8 +70,8 @@ esetSpectralMap <- function(eset,
 	shape = if(length(shapeVar) == 0)	15	else	numeric(),
 	sizeVar = character(), 
 	size = if(length(sizeVar) == 0){
-		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
-			packageInteractivity == "rbokeh", 5, 2.5
+		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "rbokeh",
+			5, 2.5
 		)
 	}else{numeric()}, 
 	sizeRange = numeric(), #c(1, 6),

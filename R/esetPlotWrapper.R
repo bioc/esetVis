@@ -215,8 +215,7 @@ esetPlotWrapper <- function(
 	shape = if(length(shapeVar) == 0)	15	else	numeric(0),
 	sizeVar = character(0), 
 	size = if(length(sizeVar) == 0){
-		ifelse(typePlot == "interactive" && length(packageInteractivity) == 1 && 
-			packageInteractivity == "rbokeh", 5, 2.5
+		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "rbokeh", 5, 2.5
 		)
 	}else{numeric()},
 	sizeRange = numeric(0), #c(1, 6),

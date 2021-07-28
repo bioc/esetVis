@@ -4,34 +4,60 @@
 \alias{esetPlotWrapper}
 \title{wrapper for biplot of features/samples contained in a \linkS4class{eSet} object}
 \usage{
-esetPlotWrapper(dataPlotSamples, dataPlotGenes = data.frame(), esetUsed,
-  xlab = "", ylab = "", colorVar = character(0), color = if
-  (length(colorVar) == 0) "black" else character(0),
-  shapeVar = character(0), shape = if (length(shapeVar) == 0) 15 else
-  numeric(0), sizeVar = character(0), size = if (length(sizeVar) == 0)
-  {     ifelse(typePlot == "interactive" && length(packageInteractivity) ==
-  1 && packageInteractivity == "rbokeh", 5, 2.5) } else {     numeric() },
-  sizeRange = numeric(0), alphaVar = character(0), alpha = if
-  (length(alphaVar) == 0) 1 else numeric(0), alphaRange = numeric(0),
-  title = "", symmetryAxes = c("combine", "separate", "none"),
-  cloudGenes = TRUE, cloudGenesColor = "black", cloudGenesNBins = if
-  (nrow(dataPlotGenes) > 0) sqrt(nrow(dataPlotGenes)) else numeric(),
-  cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
-  packageTextLabel = c("ggrepel", "ggplot2"), topGenes = 10,
-  topGenesCex = 2.5, topGenesVar = character(0),
-  topGenesJust = c(0.5, 0.5), topGenesColor = "black",
-  topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(0),
-  topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
-  geneSets = list(), geneSetsVar = character(0),
-  geneSetsMaxNChar = numeric(0), topGeneSets = 10,
-  topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5),
-  topGeneSetsColor = "black", includeLegend = TRUE,
-  includeLineOrigin = TRUE, typePlot = c("static", "interactive"),
-  figInteractiveSize = c(600, 400), ggvisAdjustLegend = TRUE,
+esetPlotWrapper(
+  dataPlotSamples,
+  dataPlotGenes = data.frame(),
+  esetUsed,
+  xlab = "",
+  ylab = "",
+  colorVar = character(0),
+  color = if (length(colorVar) == 0) "black" else character(0),
+  shapeVar = character(0),
+  shape = if (length(shapeVar) == 0) 15 else numeric(0),
+  sizeVar = character(0),
+  size = if (length(sizeVar) == 0) {     ifelse(typePlot[1] == "interactive" &&
+    packageInteractivity[1] == "rbokeh", 5, 2.5) } else {     numeric() },
+  sizeRange = numeric(0),
+  alphaVar = character(0),
+  alpha = if (length(alphaVar) == 0) 1 else numeric(0),
+  alphaRange = numeric(0),
+  title = "",
+  symmetryAxes = c("combine", "separate", "none"),
+  cloudGenes = TRUE,
+  cloudGenesColor = "black",
+  cloudGenesNBins = if (nrow(dataPlotGenes) > 0) sqrt(nrow(dataPlotGenes)) else
+    numeric(),
+  cloudGenesIncludeLegend = FALSE,
+  cloudGenesTitleLegend = "nGenes",
+  packageTextLabel = c("ggrepel", "ggplot2"),
+  topGenes = 10,
+  topGenesCex = 2.5,
+  topGenesVar = character(0),
+  topGenesJust = c(0.5, 0.5),
+  topGenesColor = "black",
+  topSamples = 10,
+  topSamplesCex = 2.5,
+  topSamplesVar = character(0),
+  topSamplesJust = c(0.5, 0.5),
+  topSamplesColor = "black",
+  geneSets = list(),
+  geneSetsVar = character(0),
+  geneSetsMaxNChar = numeric(0),
+  topGeneSets = 10,
+  topGeneSetsCex = 2.5,
+  topGeneSetsJust = c(0.5, 0.5),
+  topGeneSetsColor = "black",
+  includeLegend = TRUE,
+  includeLineOrigin = TRUE,
+  typePlot = c("static", "interactive"),
+  figInteractiveSize = c(600, 400),
+  ggvisAdjustLegend = TRUE,
   interactiveTooltip = TRUE,
   interactiveTooltipExtraVars = character(0),
   packageInteractivity = c("rbokeh", "ggvis"),
-  returnTopElements = FALSE, returnEsetPlot = FALSE)
+  returnTopElements = FALSE,
+  returnEsetPlot = FALSE
+)
 }
 \arguments{
 \item{dataPlotSamples}{data.frame with columns 'X', 'Y' with coordinates 
@@ -263,7 +289,7 @@ colorPalette <- c("dodgerblue", colorRampPalette(c("white","dodgerblue2", "darkb
 # run the analysis
 # with 'returnAnalysis' set to TRUE to have all objects required for the esetPlotWrapper
 outputEsetSPM <- esetSpectralMap(eset = ALL, 
-	title = "Acute lymphoblastic leukemia dataset \\n Spectral map complete",
+	title = "Acute lymphoblastic leukemia dataset \n Spectral map complete",
 	colorVar = "BT", color = colorPalette,
 	shapeVar = "sex", shape = 15:16,
 	sizeVar = "age", sizeRange = c(2, 6),
@@ -281,7 +307,7 @@ esetPlotWrapper(
 	dataPlotSamples = outputEsetSPM$analysis$dataPlotSamples,
 	dataPlotGenes = outputEsetSPM$analysis$dataPlotGenes,
 	esetUsed = outputEsetSPM$analysis$esetUsed,
-	title = paste("Acute lymphoblastic leukemia dataset \\n Spectral map"),
+	title = paste("Acute lymphoblastic leukemia dataset \n Spectral map"),
 	colorVar = "BT", color = colorPalette,
 	shapeVar = "relapse", 
 	sizeVar = "age", sizeRange = c(2, 6),

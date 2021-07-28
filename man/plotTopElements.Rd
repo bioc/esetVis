@@ -4,12 +4,22 @@
 \alias{plotTopElements}
 \title{create \code{geom_text} object with top genes/sample/pathways}
 \usage{
-plotTopElements(top, type = c("gene", "sample", "geneSets"),
-  var = character(), cex = 1, just = c(0.5, 0.5), color = "black",
-  dataPlotGenes = data.frame(), dataPlotSamples = data.frame(),
-  esetUsed, geneSets = list(), geneSetsVar = character(),
-  geneSetsMaxNChar = numeric(), returnTopElements = FALSE,
-  packageTextLabel = c("ggrepel", "ggplot2"))
+plotTopElements(
+  top,
+  type = c("gene", "sample", "geneSets"),
+  var = character(),
+  cex = 1,
+  just = c(0.5, 0.5),
+  color = "black",
+  dataPlotGenes = data.frame(),
+  dataPlotSamples = data.frame(),
+  esetUsed,
+  geneSets = list(),
+  geneSetsVar = character(),
+  geneSetsMaxNChar = numeric(),
+  returnTopElements = FALSE,
+  packageTextLabel = c("ggrepel", "ggplot2")
+)
 }
 \arguments{
 \item{top}{numeric, number of top elements}
