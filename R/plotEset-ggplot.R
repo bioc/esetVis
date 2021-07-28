@@ -2,6 +2,7 @@
 #' @param object object of class \link{esetPlot}
 #' @return \code{ggplot} object
 #' @importFrom grid unit
+#' @importFrom utils packageVersion
 #' @author Laure Cougnaud
 ggPlotEset <- function(object){
 		
@@ -48,14 +49,20 @@ ggPlotEset <- function(object){
 			ggplot2::aes_string(x = 'X', y = 'Y', fill = fillAes),
 				data = object@dataPlotGenes, bins = object@cloudGenesNBins) +
 			ggplot2::scale_fill_gradientn(colours = c(baseFillColor, object@cloudGenesColor))#c(0.5, 0.8)
+		
 		#if(includeLegend)	nLegendsSamples <- length(c(colorVar, shapeVar, sizeVar, alphaVar))
 		# set legend if specified, and in the first position
-		g <- g + ggplot2::guides(
-			fill = if(!object@cloudGenesIncludeLegend)
-				FALSE	else	
-				ggplot2::guide_legend(order = 1, 
-					# change legend title, by default 'count'
-					title = object@cloudGenesTitleLegend))
+		fillGuideArgs <- if(!object@cloudGenesIncludeLegend){
+			ifelse(packageVersion("ggplot2") >= "3.3.4", "none", FALSE)
+		}else{
+			ggplot2::guide_legend(
+				order = 1, 
+				# change legend title, by default 'count'
+				title = object@cloudGenesTitleLegend
+			)
+		}
+		g <- g + ggplot2::guides(fill = fillGuideArgs)
+			
 		
 	}
 	
