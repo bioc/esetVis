@@ -13,7 +13,8 @@ Description: Utility functions for visualization of expressionSet (or
 Imports: mpm, hexbin, Rtsne, MLP, grid, Biobase, MASS, stats, utils,
         grDevices, methods
 Suggests: ggplot2, ggvis, rbokeh, ggrepel, knitr, rmarkdown, ALL,
-        hgu95av2.db, AnnotationDbi, pander, SummarizedExperiment
+        hgu95av2.db, AnnotationDbi, pander, SummarizedExperiment,
+        GO.db
 biocViews: Visualization, DataRepresentation, DimensionReduction,
         PrincipalComponent, Pathways
 VignetteBuilder: knitr
