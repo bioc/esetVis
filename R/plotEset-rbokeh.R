@@ -3,7 +3,7 @@
 #' @return \code{rbokeh} plot
 #' @author Laure Cougnaud
 rbokehPlotEset <- function(object){
-
+	
 	esetMethods <- getMethodsInputObjectEsetVis(object@eset)
 	
 	if(!requireNamespace("rbokeh", quietly = TRUE))
@@ -66,7 +66,7 @@ rbokehPlotEset <- function(object){
 	if(length(varsPlot) > 0){
 		idxRowsKept <- rowSums(is.na(dataPlotSamplesWithAnnotation[, varsPlot, drop = FALSE])) == 0
 		dataPlotWithAnnotationWthtNA <- dataPlotSamplesWithAnnotation[idxRowsKept, ]
-	}else	dataPlotSamplesWithAnnotation
+	}else	dataPlotWithAnnotationWthtNA <- dataPlotSamplesWithAnnotation
 		
 	# possible to specify a data.frame for the hoover, 
 	# so add additional variables if requested
@@ -92,22 +92,30 @@ rbokehPlotEset <- function(object){
 	}else	NULL
 	
 	# samples plot
+	color <- if(length(object@colorVar) > 0){object@colorVar}else{object@color}
+	glyph <- if(length(object@shapeVar) > 0){object@shapeVar}else{object@shape}
+	size <- if(length(object@sizeVar) > 0){object@sizeVar}else{object@size}
+	alpha <- if(length(alphaVar) > 0){alphaVar}else{alpha}
 	
-	color <- if(length(object@colorVar) > 0)	object@colorVar	else	object@color
-	glyph <- if(length(object@shapeVar) > 0)	object@shapeVar	else	object@shape
-	size <- if(length(object@sizeVar) > 0)	object@sizeVar	else	object@size
-	alpha <- if(length(alphaVar) > 0)	alphaVar	else	alpha
+	if(length(object@colorVar) == 0 && length(object@shapeVar) == 0 && 
+		length(object@sizeVar) == 0 && length(alphaVar) == 0 &&
+		object@includeLegend){
+		warning("Legend is not supported in rbokeh interactive plot ",
+			"if no aesthetic variable is specified, so no legend is included.")
+		object@includeLegend <- FALSE
+	}
+	
 	g <- rbokeh::ly_points(
-		fig = g,
-		data = dataPlotWithAnnotationWthtNA,
-		x = "X", y = "Y",
-		hover = hoverDf,
-		#lname = "sample",
-		legend = object@includeLegend,
-		color = color,
-		glyph = glyph,
-		size = size,
-		alpha = alpha
+			fig = g,
+			data = dataPlotWithAnnotationWthtNA,
+			x = "X", y = "Y",
+			hover = hoverDf,
+			#lname = "sample",
+			legend = object@includeLegend,
+			color = color,
+			glyph = glyph,
+			size = size,
+			alpha = alpha
 	)
 	
 	## add horizontal/vertical lines

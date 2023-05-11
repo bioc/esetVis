@@ -1,3 +1,5 @@
+1.27.0.9000
+  o rbokeh plot: fix error when no aesthetic variable is specified
 1.19.1
   o default for typePlot: fix issue length > 1 in coercion to logical
   o fix for ggplot2 >= 3.3.4: replace guides(fill = FALSE) by guides(fill = 'none')
