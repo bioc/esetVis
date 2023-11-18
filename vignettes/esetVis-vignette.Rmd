@@ -500,8 +500,10 @@ interactive plot.
 
 ### rbokeh
 
+`r if(!requireNamespace(package = "rbokeh", quietly = TRUE)) "This example is not included as the rbokeh package is not available."`
+
 <!-- out.width = "600px", out.height = "800px" -->
-```{r ALL-interactivePlot-rbokeh, cache = FALSE}
+```{r ALL-interactivePlot-rbokeh, eval = requireNamespace(package = "rbokeh", quietly = TRUE), cache = FALSE}
 		
 	esetSPMInteractive(
 		packageInteractivity = "rbokeh",
