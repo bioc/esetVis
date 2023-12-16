@@ -2,6 +2,7 @@
 #' @param object object of class \link{esetPlot}
 #' @return \code{ggvis} plot object
 #' @author Laure Cougnaud
+#' @keywords internal
 ggvisPlotEset <- function(object){
 	
 	esetMethods <- getMethodsInputObjectEsetVis(object@eset)

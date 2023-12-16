@@ -1,3 +1,6 @@
+1.29.2
+  o interactive plot: replace rbokeh (archived) by plotly
+  o doc: use internal keyword for internal functions
 1.29.1
   o vignette: run rbokeh example only if package is available
 1.26.1

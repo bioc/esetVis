@@ -14,8 +14,12 @@ esetLda(
   shapeVar = character(),
   shape = if (length(shapeVar) == 0) 15 else numeric(),
   sizeVar = character(),
-  size = if (length(sizeVar) == 0) {     ifelse(typePlot[1] == "interactive" &&
-    packageInteractivity[1] == "rbokeh", 5, 2.5) } else {     numeric() },
+  size = if (length(sizeVar) == 0) {
+     ifelse(typePlot[1] == "interactive" &&
+    packageInteractivity[1] == "plotly", 20, 2.5)
+ } else {
+     numeric()
+ },
   sizeRange = numeric(),
   alphaVar = character(),
   alpha = if (length(alphaVar) == 0) 1 else numeric(),
@@ -29,12 +33,14 @@ esetLda(
   cloudGenesIncludeLegend = FALSE,
   cloudGenesTitleLegend = "nGenes",
   topGenes = 10,
-  topGenesCex = 2.5,
+  topGenesCex = ifelse(typePlot[1] == "interactive" && packageInteractivity[1] ==
+    "plotly", 10, 2.5),
   topGenesVar = character(),
   topGenesJust = c(0.5, 0.5),
   topGenesColor = "black",
   topSamples = 10,
-  topSamplesCex = 2.5,
+  topSamplesCex = ifelse(typePlot[1] == "interactive" && packageInteractivity[1] ==
+    "plotly", 10, 2.5),
   topSamplesVar = character(),
   topSamplesJust = c(0.5, 0.5),
   topSamplesColor = "black",
@@ -42,13 +48,14 @@ esetLda(
   geneSetsVar = character(),
   geneSetsMaxNChar = numeric(),
   topGeneSets = 10,
-  topGeneSetsCex = 2.5,
+  topGeneSetsCex = ifelse(typePlot[1] == "interactive" && packageInteractivity[1] ==
+    "plotly", 10, 2.5),
   topGeneSetsJust = c(0.5, 0.5),
   topGeneSetsColor = "black",
   includeLegend = TRUE,
   includeLineOrigin = TRUE,
   typePlot = c("static", "interactive"),
-  packageInteractivity = c("rbokeh", "ggvis"),
+  packageInteractivity = c("plotly", "ggvis"),
   figInteractiveSize = c(600, 400),
   ggvisAdjustLegend = TRUE,
   interactiveTooltip = TRUE,
@@ -88,8 +95,8 @@ used for the size, empty by default}
 \item{size}{character or factor with specified size(s) (cex) for the points, 
 replicated if needed.
 This is used only if \code{sizeVar} is empty.
-By default: '2.5' if \code{sizeVar} is not specified and default 
-\code{ggplot} size(s) otherwise}
+By default: '2.5' if \code{sizeVar} is not specified (20 for a plotly plot)
+and default \code{ggplot} size(s) otherwise}
 
 \item{sizeRange}{size (cex) range used in the plot, possible only 
 if the \code{sizeVar} is 'numeric' or 'integer'}
@@ -225,14 +232,14 @@ interactive' (potentially interactive)}
 
 \item{packageInteractivity}{if \code{typePlot} is 'interactive', 
 package used for interactive plot,
-either 'rbokeh' (by default) or 'ggvis'}
+either 'plotly' (by default) (by default) or 'ggvis'.}
 
 \item{figInteractiveSize}{vector containing the size of the interactive plot, 
 as [width, height]
 by default: c(600, 400). This is passed to the \code{width} and 
 \code{height} parameters of:
 \itemize{
- \item{for rbokeh plots: }{the \code{bokeh::figure} function}
+ \item{for plotly plots: }{the \code{\link[plotly]{ggplotly}} function}
  \item{for ggvis plots: }{the \code{ggvis::set_options} function}
 }}
 
@@ -243,7 +250,7 @@ overlapping legends when multiple legends}
 sample annotation (variables used in the plot) in the plot}
 
 \item{interactiveTooltipExtraVars}{name of extra variable(s) 
-(in varLabels of the \code{eset}) to add in rbokehEsetPlot to label the samples,
+(in varLabels of the \code{eset}) to add in plotlyEsetPlot to label the samples,
 empty by default}
 
 \item{returnAnalysis}{logical, if TRUE (FALSE by default), return also the output of the analysis,

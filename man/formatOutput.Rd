@@ -24,3 +24,4 @@ format output of \link{plotEset} function
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

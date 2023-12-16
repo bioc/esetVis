@@ -1,8 +1,8 @@
 Package: esetVis
 Type: Package
 Title: Visualizations of expressionSet Bioconductor object
-Version: 1.29.1
-Date: 2023-11-18
+Version: 1.29.2
+Date: 2023-12-15
 Author: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
 Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
 Description: Utility functions for visualization of expressionSet (or
@@ -12,7 +12,7 @@ Description: Utility functions for visualization of expressionSet (or
         are available.
 Imports: mpm, hexbin, Rtsne, MLP, grid, Biobase, MASS, stats, utils,
         grDevices, methods
-Suggests: ggplot2, ggvis, rbokeh, ggrepel, knitr, rmarkdown, ALL,
+Suggests: ggplot2, ggvis, plotly, ggrepel, knitr, rmarkdown, ALL,
         hgu95av2.db, AnnotationDbi, pander, SummarizedExperiment,
         GO.db
 biocViews: Visualization, DataRepresentation, DimensionReduction,
@@ -20,18 +20,4 @@ biocViews: Visualization, DataRepresentation, DimensionReduction,
 VignetteBuilder: knitr
 License: GPL-3
 NeedsCompilation: no
-Collate: 
-    'esetLda.R'
-    'esetPlot-class.R'
-    'esetPlotWrapper.R'
-    'esetSpectralMap.R'
-    'esetTsne.R'
-    'getGeneSetsForPlot.R'
-    'getMethodsInputObjectEsetVis.R'
-    'miscellaneous.R'
-    'plotEset-ggplot.R'
-    'plotEset-ggvis.R'
-    'plotEset-rbokeh.R'
-    'plotEset.R'
-    'plotTopElements.R'
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

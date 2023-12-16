@@ -23,3 +23,4 @@ and if the variable is not numeric or integer (doesn't work with ggplot2)
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

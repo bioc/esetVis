@@ -18,3 +18,4 @@ visualize and \link{esetPlot} with the 'ggplot2' package
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

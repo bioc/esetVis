@@ -5,7 +5,7 @@
 \alias{plotEset}
 \alias{plotEset,ggplotEsetPlot-method}
 \alias{plotEset,ggvisEsetPlot-method}
-\alias{plotEset,rbokehEsetPlot-method}
+\alias{plotEset,plotlyEsetPlot-method}
 \title{plot an \link{plotEset} object}
 \usage{
 plotEset(object, returnEsetPlot = FALSE)
@@ -14,7 +14,7 @@ plotEset(object, returnEsetPlot = FALSE)
 
 \S4method{plotEset}{ggvisEsetPlot}(object, returnEsetPlot = FALSE)
 
-\S4method{plotEset}{rbokehEsetPlot}(object, returnEsetPlot = FALSE)
+\S4method{plotEset}{plotlyEsetPlot}(object, returnEsetPlot = FALSE)
 }
 \arguments{
 \item{object}{object of class \link{esetPlot}}
@@ -34,3 +34,4 @@ plot an \link{plotEset} object
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

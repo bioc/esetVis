@@ -27,8 +27,8 @@
 #' @param size character or factor with specified size(s) (cex) for the points, 
 #' replicated if needed.
 #' This is used only if \code{sizeVar} is empty.
-#' By default: '2.5' if \code{sizeVar} is not specified and default 
-#' \code{ggplot} size(s) otherwise
+#' By default: '2.5' if \code{sizeVar} is not specified (20 for a plotly plot)
+#' and default \code{ggplot} size(s) otherwise
 #' @param sizeRange, size (cex) range used in the plot, possible only 
 #' if the \code{sizeVar} is 'numeric' or 'integer'
 #' @param alphaVar name of variable (in varLabels of the \code{eset}) 
@@ -134,7 +134,7 @@
 #' by default: c(600, 400). This is passed to the \code{width} and 
 #' \code{height} parameters of:
 #' \itemize{
-#'  \item{for rbokeh plots: }{the \code{bokeh::figure} function}
+#'  \item{for plotly plots: }{the \code{\link[plotly]{ggplotly}} function}
 #'  \item{for ggvis plots: }{the \code{ggvis::set_options} function}
 #' }
 #' @param ggvisAdjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
@@ -142,11 +142,11 @@
 #' @param interactiveTooltip logical, if TRUE, add hoover functionality showing
 #' sample annotation (variables used in the plot) in the plot
 #' @param interactiveTooltipExtraVars name of extra variable(s) 
-#' (in varLabels of the \code{eset}) to add in rbokehEsetPlot to label the samples,
+#' (in varLabels of the \code{eset}) to add in plotlyEsetPlot to label the samples,
 #' empty by default
 #' @param packageInteractivity if \code{typePlot} is 'interactive', 
 #' package used for interactive plot,
-#' either 'rbokeh' (by default) or 'ggvis'
+#' either 'plotly' (by default) (by default) or 'ggvis'.
 #' @param returnTopElements logical, if TRUE return also the top elements
 #' @param returnEsetPlot logical, if TRUE return also the \link{esetPlot} object
 #' @examples
@@ -197,7 +197,8 @@
 #'       }
 #'     \item{otherwise, the \code{ggplot} object only}
 #'    }
-#'   \item{\code{interactive}: }{a \code{ggvis} or \code{rbokeh} object, depending on the \code{packageInteractivity} parameter}
+#'   \item{\code{interactive}: }{a \code{ggvis} or \code{plotly} object,
+#' 		depending on the \code{packageInteractivity} parameter}
 #' }
 #' @import Biobase
 #' @importFrom hexbin hexbin
@@ -215,7 +216,7 @@ esetPlotWrapper <- function(
 	shape = if(length(shapeVar) == 0)	15	else	numeric(0),
 	sizeVar = character(0), 
 	size = if(length(sizeVar) == 0){
-		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "rbokeh", 5, 2.5
+		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "plotly", 20, 2.5
 		)
 	}else{numeric()},
 	sizeRange = numeric(0), #c(1, 6),
@@ -229,7 +230,11 @@ esetPlotWrapper <- function(
 	cloudGenesNBins = if(nrow(dataPlotGenes) > 0)	sqrt(nrow(dataPlotGenes))	else	numeric(),
 	cloudGenesIncludeLegend = FALSE, cloudGenesTitleLegend = "nGenes",
 	packageTextLabel = c("ggrepel", "ggplot2"),
-	topGenes = 10, topGenesCex = 2.5, topGenesVar = character(0), topGenesJust = c(0.5, 0.5), topGenesColor = "black",
+	topGenes = 10,
+	topGenesCex = ifelse(
+		typePlot[1] == "interactive" && packageInteractivity[1] == "plotly",
+		10, 2.5),
+	topGenesVar = character(0), topGenesJust = c(0.5, 0.5), topGenesColor = "black",
 	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(0), topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
 	geneSets = list(), geneSetsVar = character(0), geneSetsMaxNChar = numeric(0), topGeneSets = 10, 
 	topGeneSetsCex = 2.5, topGeneSetsJust = c(0.5, 0.5), topGeneSetsColor = "black",
@@ -237,8 +242,16 @@ esetPlotWrapper <- function(
 	typePlot = c("static", "interactive"),
 	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE,
 	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(0),
-	packageInteractivity = c("rbokeh", "ggvis"),
+	packageInteractivity = c("plotly", "ggvis"),
 	returnTopElements = FALSE, returnEsetPlot = FALSE){
+
+	if(identical(packageInteractivity, "rbokeh")){
+		.Deprecated(msg = paste("The 'rbokeh' interactive plot is deprecated",
+			"(as the rbokeh package is archived), a 'plotly' interactive plot",
+			"is created instead."
+		))
+		packageInteractivity <- "plotly"
+	}
 
 	symmetryAxes <- match.arg(symmetryAxes)
 	packageTextLabel <- match.arg(packageTextLabel)
@@ -329,7 +342,7 @@ esetPlotWrapper <- function(
 	esetPlotFct <- switch(typePlot,
 		"static" = "ggplotEsetPlot",
 		"interactive" = switch(packageInteractivity,
-			'rbokeh' = "rbokehEsetPlot",
+			'plotly' = "plotlyEsetPlot",
 			'ggvis' = "ggvisEsetPlot"
 		)
 	)
