@@ -64,7 +64,7 @@ esetTsne <- function(eset,
 	shape = if(length(shapeVar) == 0)	15	else	numeric(),
 	sizeVar = character(), 
 	size = if(length(sizeVar) == 0){
-		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "rbokeh", 5, 2.5
+		ifelse(typePlot[1] == "interactive" && packageInteractivity[1] == "plotly", 20, 2.5
 		)
 	}else{numeric()},
 	sizeRange = numeric(),
@@ -78,14 +78,26 @@ esetTsne <- function(eset,
 	fctTransformDataForInputTsne = NULL,
 	symmetryAxes = c("combine", "separate", "none"),
 	packageTextLabel = c("ggrepel", "ggplot2"),
-	topSamples = 10, topSamplesCex = 2.5, topSamplesVar = character(), 
+	topSamples = 10,
+	topSamplesCex = ifelse(
+		typePlot[1] == "interactive" && packageInteractivity[1] == "plotly",
+		10, 2.5),
+	topSamplesVar = character(),
 	topSamplesJust = c(0.5, 0.5), topSamplesColor = "black",
 	includeLegend = TRUE, includeLineOrigin = TRUE,
 	typePlot = c("static", "interactive"), 
-	packageInteractivity = c("rbokeh", "ggvis"),
+	packageInteractivity = c("plotly", "ggvis"),
 	figInteractiveSize  = c(600, 400), ggvisAdjustLegend = TRUE, 
 	interactiveTooltip = TRUE, interactiveTooltipExtraVars = character(),
 	returnAnalysis = FALSE, returnEsetPlot = FALSE){
+
+	if(identical(packageInteractivity, "rbokeh")){
+		.Deprecated(msg = paste("The 'rbokeh' interactive plot is deprecated",
+			"(as the rbokeh package is archived), a 'plotly' interactive plot",
+			"is created instead."
+		))
+		packageInteractivity <- "plotly"
+	}
 
 	symmetryAxes <- match.arg(symmetryAxes)
 	packageInteractivity <- match.arg(packageInteractivity)

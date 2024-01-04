@@ -1,6 +1,9 @@
+1.28.2
+  o interactive plot: replace rbokeh (archived) by plotly
+  o doc: use internal keyword for internal functions
 1.28.1
   o vignette: run rbokeh example only if package is available
-1.27.1
+1.26.1
   o rbokeh plot - fixes error: 
     - when no aesthetic variable is specified
     - dataPlotWithAnnotationWthtNA not found

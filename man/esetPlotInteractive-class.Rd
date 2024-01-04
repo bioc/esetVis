@@ -18,7 +18,7 @@ a S4 class to represent interactive plots
 sample annotation (variables used in the plot) in the plot}
 
 \item{\code{tooltipVars}}{name of extra phenotypic variable(s) 
-to add in rbokehEsetPlot to label the samples}
+to add in plotlyEsetPlot to label the samples}
 
 \item{\code{sizePlot}}{vector containing the size of the interactive plot, 
 as [width, height], by default: c(600, 400).}
@@ -33,3 +33,4 @@ as [width, height], by default: c(600, 400).}
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

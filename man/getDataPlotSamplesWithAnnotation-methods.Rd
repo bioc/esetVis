@@ -5,6 +5,7 @@
 \alias{getDataPlotSamplesWithAnnotation}
 \alias{getDataPlotSamplesWithAnnotation,esetPlot-method}
 \alias{getDataPlotSamplesWithAnnotation,ggvisEsetPlot-method}
+\alias{getDataPlotSamplesWithAnnotation,plotlyEsetPlot-method}
 \title{get sample data for plot}
 \usage{
 getDataPlotSamplesWithAnnotation(object)
@@ -12,6 +13,8 @@ getDataPlotSamplesWithAnnotation(object)
 \S4method{getDataPlotSamplesWithAnnotation}{esetPlot}(object)
 
 \S4method{getDataPlotSamplesWithAnnotation}{ggvisEsetPlot}(object)
+
+\S4method{getDataPlotSamplesWithAnnotation}{plotlyEsetPlot}(object)
 }
 \arguments{
 \item{object}{\link{plotEset} object}
@@ -26,3 +29,4 @@ get sample data for plot
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

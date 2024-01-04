@@ -4,6 +4,7 @@
 #' @importFrom grid unit
 #' @importFrom utils packageVersion
 #' @author Laure Cougnaud
+#' @keywords internal
 ggPlotEset <- function(object){
 		
 	if(!requireNamespace("ggplot2", quietly = TRUE))

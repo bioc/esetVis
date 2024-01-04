@@ -19,6 +19,7 @@
 #' }
 #' @author Laure Cougnaud
 #' @import Biobase
+#' @keywords internal
 getMethodsInputObjectEsetVis <- function(x){
 	
 	if(inherits(x, what = c('ExpressionSet'))){

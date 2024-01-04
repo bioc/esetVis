@@ -15,3 +15,4 @@ string with first letter capitalized
 \description{
 capitalize the first letter of a word
 }
+\keyword{internal}

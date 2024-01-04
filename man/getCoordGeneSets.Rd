@@ -16,6 +16,8 @@ the genes IDs must correspond to the sampleNames in the eset}
 
 \item{geneSetsVar}{variable of the featureData used to match the genes contained in geneSets,
 most probably ENTREZID, if NULL the featureNames of the eSet are used}
+
+\item{...}{Any parameters passed to the \code{\link{getTopElements}}}
 }
 \value{
 data.frame with two columns 'X' and 'Y' with coordinates for the gene sets
@@ -25,6 +27,5 @@ extract coordinates gene sets
 }
 \author{
 Laure Cougnaud
-
-Laure Cougnaud
 }
+\keyword{internal}

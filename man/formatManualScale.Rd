@@ -22,3 +22,4 @@ extend manual scale values if required
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

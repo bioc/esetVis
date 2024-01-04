@@ -7,3 +7,4 @@
 \description{
 This is used for the definition of the title/axes labels for the ggplot2 version
 }
+\keyword{internal}

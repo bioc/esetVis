@@ -1,23 +1,14 @@
-#' create \code{geom_text} object with top genes/sample/pathways
-#' @param top numeric, number of top elements
-#' @param type type of elements to plot, either 'gene', 'sample', or 'geneSets'
-#' @param var variable used to annotate the elements, only used for 'gene' and 'sample'
-#' @param cex cex of text in the plot
-#' @param just justification of elements in the plot, only use if \code{packageTextLabel} is 'ggplot2'
-#' @param color color for the elements in the plot
-#' @param dataPlotGenes data.frame with two columns 'X' and 'Y' with coordinates for the genes
-#' @param dataPlotSamples data.frame with two columns 'X' and 'Y' with coordinates for the samples
-#' @param esetUsed expressionSet (or SummarizedExperiment) object with data
-#' @param geneSets list of gene sets, e.g. gene pathways, output from the 'getGeneSets' function in MLP
-#' the genes IDs must correspond to the sampleNames in the eset.
-#' If several gene sets have the same name, they will be combine to extract the top gene sets.
-#' @param geneSetsVar variable of the featureData used to match the genes contained in geneSets,
-#' most probably ENTREZID, if not specified the featureNames of the eSet are used
-#' @param geneSetsMaxNChar maximum number of characters for pathway names, by default keep entire names
-#' @param returnTopElements logical if TRUE (FALSE by default) return the outlying elements
+#' plot top elements for a static plot
+#'
+#' This create \code{geom_text} object with top genes/sample/pathways
 #' @param packageTextLabel package used to label the outlying genes/samples/gene sets,
 #' either 'ggrepel' (by default, only used if package \code{ggrepel} is available),
 #' or 'ggplot2'
+#' @param cex cex of text in the plot
+#' @param just justification of elements in the plot, only use if \code{packageTextLabel} is 'ggplot2'
+#' @param color color for the elements in the plot
+#' @param returnTopElements logical if TRUE (FALSE by default) return the outlying elements
+#' @inheritParams getTopElements
 #' @return 
 #' \itemize{
 #'  \item{if the \code{elements} are present in the data: if \code{returnTopElements} is: }
@@ -31,18 +22,69 @@
 #' 	 }
 #'  \item{if not, return \code{NULL}}
 #' }
+#' @keywords internal
 #' @author Laure Cougnaud
-#' @import Biobase
-plotTopElements <- function(top, 
+plotTopElements <- function(
+	packageTextLabel = c("ggrepel", "ggplot2"),
+	cex = 1, just = c(0.5, 0.5), color = "black",
+	returnTopElements = FALSE, ...){
+
+	packageTextLabel <- match.arg(packageTextLabel)
+	dataPlotText <- getTopElements(...)
+
+	# issue if all labels are NA
+	geomText <- if(all(is.na(dataPlotText$labels)))	NULL	else{
+
+		argsGeomTextFct <- list(
+			mapping = ggplot2::aes_string(x = 'X', y = 'Y', label = 'labels'),
+			data = dataPlotText, color = color, size = cex
+		)
+		if(packageTextLabel	== "ggrepel" & requireNamespace("ggrepel", quietly = TRUE)){
+			geomTextFct <- ggrepel::geom_text_repel
+		}else{
+			geomTextFct <- ggplot2::geom_text
+			argsGeomTextFct <- c(argsGeomTextFct, list(hjust = just[1], vjust = just[2]))
+		}
+		do.call(geomTextFct, argsGeomTextFct)
+
+	}
+
+	res <- if(returnTopElements){
+
+		topElements <- dataPlotText$labels
+		names(topElements) <- rownames(dataPlotText)
+		list(topElements = topElements, geomText = geomText)
+
+	}else	geomText
+
+	return(res)
+
+}
+
+#' create \code{geom_text} object with top genes/sample/pathways
+#' @param top numeric, number of top elements
+#' @param type type of elements to plot, either 'gene', 'sample', or 'geneSets'
+#' @param var variable used to annotate the elements, only used for 'gene' and 'sample'
+#' @param dataPlotGenes data.frame with two columns 'X' and 'Y' with coordinates for the genes
+#' @param dataPlotSamples data.frame with two columns 'X' and 'Y' with coordinates for the samples
+#' @param esetUsed expressionSet (or SummarizedExperiment) object with data
+#' @param geneSets list of gene sets, e.g. gene pathways, output from the 'getGeneSets' function in MLP
+#' the genes IDs must correspond to the sampleNames in the eset.
+#' If several gene sets have the same name, they will be combine to extract the top gene sets.
+#' @param geneSetsVar variable of the featureData used to match the genes contained in geneSets,
+#' most probably ENTREZID, if not specified the featureNames of the eSet are used
+#' @param geneSetsMaxNChar maximum number of characters for pathway names, by default keep entire names
+#' @param returnTopElements logical if TRUE (FALSE by default) return the outlying elements
+#' @return Data.frame with coordinates and labels of the top elements
+#' @keywords internal
+#' @author Laure Cougnaud
+getTopElements <- function(top,
 	type = c("gene", "sample", "geneSets"),
-	var = character(), cex = 1, just = c(0.5, 0.5), color = "black",
+	var = character(),
 	dataPlotGenes = data.frame(), dataPlotSamples = data.frame(), esetUsed, 
-	geneSets = list(), geneSetsVar = character(), geneSetsMaxNChar = numeric(),
-	returnTopElements = FALSE,
-	packageTextLabel = c("ggrepel", "ggplot2")){
+	geneSets = list(), geneSetsVar = character(), geneSetsMaxNChar = numeric()){
 
 	type <- match.arg(type)
-	packageTextLabel <- match.arg(packageTextLabel)
 	
 	# get methods depending on the class of the object
 	esetMethods <- getMethodsInputObjectEsetVis(esetUsed)
@@ -75,7 +117,7 @@ plotTopElements <- function(top,
 	)
 	
 	# for gene sets, if no mapped gene is found
-	resGgplot <- if(nrow(coor) > 0){
+	dataPlotText <- if(nrow(coor) > 0){
 	
 		nElements <- nrow(coor)
 		distToOrigin <- sqrt(rowSums(coor ^ 2))
@@ -87,56 +129,27 @@ plotTopElements <- function(top,
 		coorElementsKept <- coor[idxElementsKept, ]
 	
 		labels <- if(type != "geneSets"){
-			
 			varInAnnot <- ifelse(length(var) == 0, "", var) %in% 
 				switch(type, 'gene' = esetMethods$fvarLabels, 'sample' = esetMethods$varLabels)(esetUsed)
 			if(!varInAnnot)	rownames(coorElementsKept)	else
 				switch(type, 'gene' = esetMethods$fData, 'sample' = esetMethods$pData)(esetUsed)[
-					rownames(coorElementsKept), var]	 
-			
-		}else	if(length(geneSetsMaxNChar) > 0){
-					res <- rownames(coorElementsKept)
-					names(res) <- substr(rownames(coorElementsKept), 1, geneSetsMaxNChar)
-					res
-				}else	rownames(coorElementsKept)
-		
-		dataPlotText <- data.frame(coor[idxElementsKept, ], labels, stringsAsFactors = FALSE)
-		
-		# issue if all labels are NA
-		geomText <- if(all(is.na(dataPlotText$labels)))	NULL	else{
-			
-			argsGeomTextFct <- list(
-				mapping = ggplot2::aes_string(x = 'X', y = 'Y', label = 'labels'),
-				data = dataPlotText, color = color, size = cex
-			)
-			if(packageTextLabel	== "ggrepel" & requireNamespace("ggrepel", quietly = TRUE)){
-				geomTextFct <- ggrepel::geom_text_repel
-			}else{
-				geomTextFct <- ggplot2::geom_text
-				argsGeomTextFct <- c(argsGeomTextFct, list(hjust = just[1], vjust = just[2]))
-			}
-			do.call(geomTextFct, argsGeomTextFct)
+					rownames(coorElementsKept), var]
+		}else{
+			if(length(geneSetsMaxNChar) > 0){
+				res <- rownames(coorElementsKept)
+				names(res) <- substr(rownames(coorElementsKept), 1, geneSetsMaxNChar)
+				res
+			}else	rownames(coorElementsKept)
 		}
-
-		return(
-				
-			if(returnTopElements){
-						
-				topElements <- dataPlotText$labels
-				names(topElements) <- rownames(dataPlotText)
-				list(topElements = topElements, geomText = geomText)
-				
-			}else	geomText
-
-		)
-
-			
+		
+		data.frame(coor[idxElementsKept, ], labels, stringsAsFactors = FALSE)
+		
 	}else{
 		warning(paste("No labels for the", type, "are found."))
 		NULL
 	}
-	
-	return(resGgplot)
+
+	return(dataPlotText)
 	
 }
 
@@ -146,10 +159,12 @@ plotTopElements <- function(top,
 #' the genes IDs must correspond to the sampleNames in the eset
 #' @param geneSetsVar variable of the featureData used to match the genes contained in geneSets,
 #' most probably ENTREZID, if NULL the featureNames of the eSet are used
+#' @param ... Any parameters passed to the \code{\link{getTopElements}}
 #' @param esetUsed expressionSet (or SummarizedExperiment) object with data
 #' @return data.frame with two columns 'X' and 'Y' with coordinates for the gene sets
 #' @author Laure Cougnaud
 #' @import Biobase
+#' @keywords internal
 #' @author Laure Cougnaud
 getCoordGeneSets <- function(dataPlotGenes, geneSets, esetUsed, geneSetsVar = list()){
 	

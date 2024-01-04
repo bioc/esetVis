@@ -22,3 +22,4 @@ generic for get axes limits
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

@@ -60,10 +60,10 @@ This package contains wrapper functions for three types of visualization:
 analysis**[@ldaFisher] for data contained in a _expressionSet
 Bioconductor_  (or an _SummarizedExperiment_) object. The visualizations are
 available in two types: **static**, via the
-[ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
+[ggplot2](https://cran.r-project.org/package=ggplot2)
 package or **interactive**, via the
-[ggvis](https://cran.r-project.org/web/packages/ggvis/index.html)
-or [rbokeh](https://cran.r-project.org/web/packages/rbokeh/index.html)
+[ggvis](https://cran.r-project.org/package=ggvis)
+or [plotly](https://cran.r-project.org/package=plotly)
 packages.
 
 ```{r options, echo = FALSE}
@@ -249,7 +249,7 @@ palette is specified via the `color` argument.
 		shapeVar = "sex", 
 		sizeVar = "age", sizeRange = c(0.1, 6),
 		alphaVar = "remissionType", alpha = c(0.3, 0.6, 0.9),
-		topSamples = 0, topGenes = 0, cloudGenes = FALSE))
+		topSamples = 0, topGenes = 0, cloudGenes = TRUE))
 
 ```
 
@@ -466,53 +466,35 @@ interactive**.
 The argument `typePlot` can be set respectively to
 `static` (by default), in this case `ggplot2` is used, or
 `interactive`, in this case either the `ggvis` or
-`rbokeh` package is used.
+`plotly` package is used.
 
 Two functionalities of the interactive plot can be of
 interest for such high-dimensional data:
 
-* **hoover** to check sample annotation.
+* **hover** to check sample annotation.
   By default, only the sample variables used for the aesthetics are displayed
-  when hoovering on a specific sample dot. Additional sample variables
-  (contained in `phenoData`) displayed in the hoover can be specified via the
+  when hovering on a specific sample dot. Additional sample variables
+  (contained in `phenoData`) displayed in the hover can be specified via the
   `interactiveTooltipExtraVars` parameter.
 * **zoom** to focus on specific sample in high-dimensional
   dataset
-  
 
-The same spectral map than in previous section is used, this time in an
-interactive plot.
+### plotly
 
-
-```{r ALL-interactivePlot}
-
-	# wrapper for rbokeh/ggvis example
-	esetSPMInteractive <- function(...)
-		esetSpectralMap(eset = ALL, 
-			title = paste("Acute lymphoblastic leukemia dataset - spectral map"),
-			colorVar = "BT", color = unname(colorPalette),
-			shapeVar = "sex",
-			alphaVar = "remissionType",
-			typePlot = "interactive", ...
-	)
-
-```
-
-### rbokeh
-
-`r if(!requireNamespace(package = "rbokeh", quietly = TRUE)) "This example is not included as the rbokeh package is not available."`
-
-<!-- out.width = "600px", out.height = "800px" -->
-```{r ALL-interactivePlot-rbokeh, eval = requireNamespace(package = "rbokeh", quietly = TRUE), cache = FALSE}
-		
-	esetSPMInteractive(
-		packageInteractivity = "rbokeh",
-		figInteractiveSize = c(700, 600),
-		size = 6,
-		# use all phenoData variables for hoover
-		interactiveTooltipExtraVars = varLabels(ALL)
-	)
-	
+```{r ALL-interactivePlot-plotly}
+esetSpectralMap(
+	eset = ALL, 
+	title = paste("Acute lymphoblastic leukemia dataset - spectral map"),
+	colorVar = "BT", color = unname(colorPalette),
+	shapeVar = "sex",
+	alphaVar = "remissionType",
+	typePlot = "interactive", packageInteractivity = "plotly",
+	figInteractiveSize = c(700, 600),
+	topGenes = 10, topGenesVar = "SYMBOL",
+	topSamples = 10,
+	# use all sample variables for hover
+	interactiveTooltipExtraVars = varLabels(ALL)
+)
 ```
 
 ### ggvis
@@ -521,19 +503,22 @@ Note: as `ggvis` plot requires to have a R session running, only a static
 version of the plot is included.
 
 ```{r ALL-interactivePlot-ggvis, cache = FALSE}
-		
-	# embed a static version of the plot
-	library(ggvis)
-	esetSPMInteractive(
-		packageInteractivity = "ggvis",
-		sizeVar = "age", sizeRange = c(2, 6),
-		figInteractiveSize = c(700, 600)
-	)
+library(ggvis)
 
+# embed a static version of the plot
+esetSpectralMap(
+	eset = ALL,
+	title = paste("Acute lymphoblastic leukemia dataset - spectral map"),
+	colorVar = "BT", color = unname(colorPalette),
+	shapeVar = "sex",
+	alphaVar = "remissionType",
+	typePlot = "interactive", packageInteractivity = "ggvis",
+	figInteractiveSize = c(700, 600),
+	sizeVar = "age", sizeRange = c(2, 6),
+	# use all phenoData variables for hover
+	interactiveTooltipExtraVars = varLabels(ALL)
+)
 ```
-
-<!-- Figure #spectralMapGgvis shows a static view of the obtained plot in ggvis. -->
-<!-- ![spectralMapGgvis](spectralMap-ggvis.svg "Screenshot of a spectral map example with ggvis") -->
 
 # Tsne: `esetTsne`
 

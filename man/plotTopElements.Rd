@@ -2,31 +2,21 @@
 % Please edit documentation in R/plotTopElements.R
 \name{plotTopElements}
 \alias{plotTopElements}
-\title{create \code{geom_text} object with top genes/sample/pathways}
+\title{plot top elements for a static plot}
 \usage{
 plotTopElements(
-  top,
-  type = c("gene", "sample", "geneSets"),
-  var = character(),
+  packageTextLabel = c("ggrepel", "ggplot2"),
   cex = 1,
   just = c(0.5, 0.5),
   color = "black",
-  dataPlotGenes = data.frame(),
-  dataPlotSamples = data.frame(),
-  esetUsed,
-  geneSets = list(),
-  geneSetsVar = character(),
-  geneSetsMaxNChar = numeric(),
   returnTopElements = FALSE,
-  packageTextLabel = c("ggrepel", "ggplot2")
+  ...
 )
 }
 \arguments{
-\item{top}{numeric, number of top elements}
-
-\item{type}{type of elements to plot, either 'gene', 'sample', or 'geneSets'}
-
-\item{var}{variable used to annotate the elements, only used for 'gene' and 'sample'}
+\item{packageTextLabel}{package used to label the outlying genes/samples/gene sets,
+either 'ggrepel' (by default, only used if package \code{ggrepel} is available),
+or 'ggplot2'}
 
 \item{cex}{cex of text in the plot}
 
@@ -34,26 +24,7 @@ plotTopElements(
 
 \item{color}{color for the elements in the plot}
 
-\item{dataPlotGenes}{data.frame with two columns 'X' and 'Y' with coordinates for the genes}
-
-\item{dataPlotSamples}{data.frame with two columns 'X' and 'Y' with coordinates for the samples}
-
-\item{esetUsed}{expressionSet (or SummarizedExperiment) object with data}
-
-\item{geneSets}{list of gene sets, e.g. gene pathways, output from the 'getGeneSets' function in MLP
-the genes IDs must correspond to the sampleNames in the eset.
-If several gene sets have the same name, they will be combine to extract the top gene sets.}
-
-\item{geneSetsVar}{variable of the featureData used to match the genes contained in geneSets,
-most probably ENTREZID, if not specified the featureNames of the eSet are used}
-
-\item{geneSetsMaxNChar}{maximum number of characters for pathway names, by default keep entire names}
-
 \item{returnTopElements}{logical if TRUE (FALSE by default) return the outlying elements}
-
-\item{packageTextLabel}{package used to label the outlying genes/samples/gene sets,
-either 'ggrepel' (by default, only used if package \code{ggrepel} is available),
-or 'ggplot2'}
 }
 \value{
 \itemize{
@@ -70,8 +41,9 @@ or 'ggplot2'}
 }
 }
 \description{
-create \code{geom_text} object with top genes/sample/pathways
+This create \code{geom_text} object with top genes/sample/pathways
 }
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

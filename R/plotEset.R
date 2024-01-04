@@ -18,6 +18,7 @@ setGeneric(name = "plotEset",
 
 #' @aliases plotEset,ggplotEsetPlot-method
 #' @rdname plotEset-methods
+#' @keywords internal
 setMethod("plotEset", "ggplotEsetPlot", function(object, returnEsetPlot){		
 	plot <- ggPlotEset(object)
 	res <- formatOutput(plot, object, "ggplot", returnEsetPlot)
@@ -26,17 +27,19 @@ setMethod("plotEset", "ggplotEsetPlot", function(object, returnEsetPlot){
 
 #' @aliases plotEset,ggvisEsetPlot-method
 #' @rdname plotEset-methods
+#' @keywords internal
 setMethod("plotEset", "ggvisEsetPlot", function(object, returnEsetPlot){		
 	plot <- ggvisPlotEset(object)
 	res <- formatOutput(plot, object, "ggvis", returnEsetPlot)
 	return(res)
 })
 
-#' @aliases plotEset,rbokehEsetPlot-method
+#' @aliases plotEset,plotlyEsetPlot-method
 #' @rdname plotEset-methods
-setMethod("plotEset", "rbokehEsetPlot", function(object, returnEsetPlot){		
-	plot <- rbokehPlotEset(object)
-	res <- formatOutput(plot, object, "rbokeh", returnEsetPlot)
+#' @keywords internal
+setMethod("plotEset", "plotlyEsetPlot", function(object, returnEsetPlot){
+	plot <- plotlyPlotEset(object)
+	res <- formatOutput(plot, object, "plotly", returnEsetPlot)
 	return(res)
 })
 
@@ -46,6 +49,7 @@ setMethod("plotEset", "rbokehEsetPlot", function(object, returnEsetPlot){
 #' @author Laure Cougnaud
 #' @docType methods
 #' @rdname getAxesLimits-methods
+#' @keywords internal
 setGeneric(
 	name = "getAxesLimits", 
 	def = function(object)	standardGeneric("getAxesLimits")
@@ -53,6 +57,7 @@ setGeneric(
 
 #' @aliases getAxesLimits,esetPlot-method
 #' @rdname getAxesLimits-methods
+#' @keywords internal
 setMethod("getAxesLimits",
 	signature = "esetPlot",
 	definition = function(object){
@@ -96,6 +101,7 @@ setMethod("getAxesLimits",
 #' @author Laure Cougnaud
 #' @docType methods
 #' @rdname getDataPlotSamplesWithAnnotation-methods
+#' @keywords internal
 setGeneric(
 	name = "getDataPlotSamplesWithAnnotation", 
 	def = function(object)	
@@ -104,6 +110,7 @@ setGeneric(
 
 #' @aliases getDataPlotSamplesWithAnnotation,esetPlot-method
 #' @rdname getDataPlotSamplesWithAnnotation-methods
+#' @keywords internal
 setMethod("getDataPlotSamplesWithAnnotation",
 	signature = "esetPlot",
 	definition = function(object){
@@ -130,6 +137,7 @@ setMethod("getDataPlotSamplesWithAnnotation",
 #' @aliases getDataPlotSamplesWithAnnotation,ggvisEsetPlot-method
 #' @rdname getDataPlotSamplesWithAnnotation-methods
 #' @importFrom methods callNextMethod
+#' @keywords internal
 setMethod("getDataPlotSamplesWithAnnotation",
 	signature = "ggvisEsetPlot",
 	definition = function(object){
@@ -146,3 +154,28 @@ setMethod("getDataPlotSamplesWithAnnotation",
 			
 })
 
+#' @aliases getDataPlotSamplesWithAnnotation,plotlyEsetPlot-method
+#' @rdname getDataPlotSamplesWithAnnotation-methods
+#' @importFrom methods callNextMethod
+#' @keywords internal
+setMethod("getDataPlotSamplesWithAnnotation",
+	signature = "plotlyEsetPlot",
+	definition = function(object){
+
+	sampleAnnotation <- callNextMethod(object)
+
+	esetMethods <- getMethodsInputObjectEsetVis(object@eset)
+
+	if(object@includeTooltip & length(object@tooltipVars) > 0){
+		sampleAnnotation <- cbind(sampleAnnotation,
+			esetMethods$pData(object@eset)[
+				rownames(sampleAnnotation),
+				setdiff(object@tooltipVars, colnames(sampleAnnotation)),
+				drop = FALSE
+			]
+		)
+	}
+
+	return(sampleAnnotation)
+
+})

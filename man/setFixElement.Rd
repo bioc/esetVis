@@ -20,3 +20,4 @@ check if the aesthetic is fixed (e.g. color, shape, size 'palette')
 \author{
 Laure Cougnaud
 }
+\keyword{internal}

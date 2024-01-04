@@ -38,7 +38,6 @@
 #' \code{ggplot} alpha otherwise.
 #' @slot alphaRange transparency (alpha) range used in the plot, 
 #' possible only if the \code{alphaVar} is 'numeric' or 'integer'
-#' This parameter is not available for rbokeh plot.
 #' @slot symmetryAxes set symmetry for axes, either:
 #' \itemize{
 #'  \item{'combine' (by default): }{both axes are symmetric and with the same limits}
@@ -205,6 +204,7 @@ esetPlot <- setClass("esetPlot",
 #' @param .Object \link{esetPlot} object
 #' @param ... additional class arguments
 #' @importFrom methods callNextMethod
+#' @keywords internal
 setMethod("initialize", "esetPlot", function(.Object, ...) {
 			
 	.Object <- callNextMethod(.Object, ...)
@@ -219,6 +219,7 @@ setMethod("initialize", "esetPlot", function(.Object, ...) {
 
 #' @title S4 Class Union with character/expression/call
 #' @description This is used for the definition of the title/axes labels for the ggplot2 version
+#' @keywords internal
 setClassUnion(name = "characterORexpressionOrCall", members = c("character", "expression", "call"))
 
 #' a S4 class to represent \code{ggplot} plots
@@ -231,8 +232,8 @@ setClassUnion(name = "characterORexpressionOrCall", members = c("character", "ex
 #' @author Laure Cougnaud
 #' @name ggplotEsetPlot-class
 #' @rdname ggplotEsetPlot-class
-#' @export
 #' @importFrom methods new
+#' @export
 ggplotEsetPlot <- setClass("ggplotEsetPlot", 
 	slots = c(
 		returnTopElements = "logical",
@@ -251,7 +252,7 @@ ggplotEsetPlot <- setClass("ggplotEsetPlot",
 #' @slot includeTooltip logical, if TRUE, add hoover functionality showing
 #' sample annotation (variables used in the plot) in the plot
 #' @slot tooltipVars name of extra phenotypic variable(s) 
-#' to add in rbokehEsetPlot to label the samples
+#' to add in plotlyEsetPlot to label the samples
 #' @slot sizePlot vector containing the size of the interactive plot, 
 #' as [width, height], by default: c(600, 400).
 #' @slot title string plot title, '' by default
@@ -263,6 +264,7 @@ ggplotEsetPlot <- setClass("ggplotEsetPlot",
 #' @rdname esetPlotInteractive-class
 #' @export
 #' @importFrom methods new
+#' @keywords internal
 esetPlotInteractive <- setClass("esetPlotInteractive", 
 	slots = c(
 		includeTooltip = "logical",
@@ -278,28 +280,29 @@ esetPlotInteractive <- setClass("esetPlotInteractive",
 	contains = "esetPlot"
 )
 
-#' a S4 class to represent \code{rbokeh} plots
+#' a S4 class to represent \code{plotly} plots
+#' @slot returnTopElements logical, if TRUE (FALSE by default)
+#' return the outlying elements labelled in the plot (if any)
 #' @slot size specified size(s) (cex) for the points, replicated if 
 #' needed, used only if \code{sizeVar} is empty, a factor or character
-#' by default: '5' if \code{sizeVar} is not specified and default 
-#' \code{ggplot} size(s) otherwise
-#' @return S4 object of class \code{rbokehEsetPlot}
+#' by default: '20' if \code{sizeVar} is not specified
+#' @return S4 object of class \code{plotlyEsetPlot}
 #' @author Laure Cougnaud
-#' @name rbokehEsetPlot-class
-#' @rdname rbokehEsetPlot-class
+#' @name plotlyEsetPlot-class
+#' @rdname plotlyEsetPlot-class
 #' @export
 #' @importFrom methods new
-rbokehEsetPlot <- setClass("rbokehEsetPlot", 
-	slots = list(size = "numeric"),
-	prototype = list(size = 5),
+#' @keywords internal
+plotlyEsetPlot <- setClass("plotlyEsetPlot",
+	slots = list(size = "numeric", returnTopElements = "logical"),
+	prototype = list(size = 20, returnTopElements = FALSE,
+		topGenesCex = 10, topSamplesCex = 10, topGeneSetsCex = 10),
 	contains = "esetPlotInteractive"
 )
 
 #' a S4 class for \code{ggvis} plot
 #' @slot adjustLegend logical, if TRUE (by default) adjust the legends in \code{ggvis} to avoid
 #' overlapping legends when multiple legends
-#' @slot alphaVar name of numeric variable (in varLabels of the \code{eset}) 
-#' used for the transparency, empty by default.
 #' @slot alphaRange transparency (alpha) range used in the plot, 
 #' c(0.1, 1) by default.
 #' @return S4 object of class \code{ggvisEsetPlot}
@@ -308,6 +311,7 @@ rbokehEsetPlot <- setClass("rbokehEsetPlot",
 #' @rdname ggvisEsetPlot-class
 #' @export
 #' @importFrom methods new
+#' @keywords internal
 ggvisEsetPlot <- setClass("ggvisEsetPlot", 
 	slots = c("adjustLegend" = "logical"),
 	prototype = list(

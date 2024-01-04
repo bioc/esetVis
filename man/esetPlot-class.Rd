@@ -72,8 +72,7 @@ By default: '1' if \code{alphaVar} is not specified and default
 \code{ggplot} alpha otherwise.}
 
 \item{\code{alphaRange}}{transparency (alpha) range used in the plot, 
-possible only if the \code{alphaVar} is 'numeric' or 'integer'
-This parameter is not available for rbokeh plot.}
+possible only if the \code{alphaVar} is 'numeric' or 'integer'}
 
 \item{\code{symmetryAxes}}{set symmetry for axes, either:
 \itemize{
@@ -183,3 +182,4 @@ otherwise not}
 x = 0 and horizontal line at y = 0}
 }}
 
+\keyword{internal}
